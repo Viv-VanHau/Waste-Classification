@@ -35,7 +35,7 @@ The training process follows a rigorous Two-Phase approach:
 
 - **ReduceLROnPlateau:** Using ReduceLROnPlateau, the learning rate is halved whenever the validation accuracy plateaus, ensuring the model reaches the global minimum of the loss function
 
-## Output:
+## 4. Output:
 
 *Fig 1. Accuracy & Loss Learning Curves*
 
