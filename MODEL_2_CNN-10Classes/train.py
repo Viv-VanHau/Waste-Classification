@@ -27,7 +27,7 @@ for root, dirs, files in os.walk(extract_path):
         break
 
 if not os.path.exists(final_dataset_path):
-    print("🔀 Đang xáo trộn ngẫu nhiên (Shuffle) và chia tỷ lệ 80 Train / 20 Val...")
+    print("Shuffling & Splitting 80 Train / 20 Val...")
     # seed=42 
     splitfolders.ratio(data_dir, output=final_dataset_path,
                        seed=42, ratio=(0.8, 0.2), group_prefix=None)
