@@ -1,6 +1,6 @@
 ## 🛠 Quick Start
 - Hardware: Google Colab (T4 GPU enabled)
-- Execution: Run the provided train.py. The best-performing model will be saved automatically as Backbone_Stage1_Final_9429.h5
+- Execution: Run the provided train.py. The best-performing model will be saved automatically as 'Backbone_Stage1_Final_9429.h5'
 
 ## **1. Model Architecture**
 The architecture utilizes Transfer Learning with a highly optimized custom head designed for underwater imagery:
@@ -39,8 +39,6 @@ The training process follows a rigorous Two-Phase approach:
 *Fig 1. Accuracy & Loss Learning Curves*
 <img width="1590" height="733" alt="image" src="https://github.com/user-attachments/assets/618ab40a-fb35-45a0-b9d3-cdbcccd535e4" />
 
-
-
 **1. Warm-up Phase Efficiency (Epochs 1-5):** During the initial frozen backbone phase, the model achieved a stable baseline accuracy of approximately 83-84%. This confirms that the custom Hybrid Pooling head (GAP + GMP) effectively integrated with the pre-trained features of MobileNetV2 from the onset
 
 **2. Fine-tuning Breakthrough (Epoch 6 Onwards):** A significant "performance leap" is observed at Epoch 6, coinciding with the unfreezing of the top 30 layers. This architectural transition triggered a sharp decline in Loss and a steep increase in Accuracy, validating that the high-level features of MobileNetV2 successfully adapted to the waste domain
@@ -53,11 +51,11 @@ The training process follows a rigorous Two-Phase approach:
 **4. Conclusion:** Model 1 training was highly successful. The implementation of Early Stopping at Epoch 23 prevented model degradation, ensuring that the final weights represent the best possible balance between bias and variance
 
 *Fig 2. MODEL 1 - Confusion Matrix (Validation Set)*
-<img width="1295" height="984" alt="image" src="https://github.com/user-attachments/assets/0b502102-00b9-48aa-95e0-7ec897787824" />
+<img width="1095" height="884" alt="image" src="https://github.com/user-attachments/assets/0b502102-00b9-48aa-95e0-7ec897787824" />
 
 
 *Fig 3. MODEL 1 - Performance Evaluation*
-<img width="885" height="511" alt="image" src="https://github.com/user-attachments/assets/ae805490-7835-4f87-9070-f3b9ff3aabda" />
+<img width="485" height="311" alt="image" src="https://github.com/user-attachments/assets/ae805490-7835-4f87-9070-f3b9ff3aabda" />
 
 The model achieves a Global Accuracy of 95.11% on a balanced dataset of 12,800 images, demonstrating robust generalization across 8 material categories
 
