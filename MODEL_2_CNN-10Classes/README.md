@@ -1,3 +1,7 @@
+## 🛠 Quick Start
+- Hardware: Google Colab (T4 GPU enabled)
+- Execution: Run the provided train.py. The best-performing model will be saved automatically as 'Stage2_10Classes_Best.h5'
+
 This model involves a more detailed classification of the UWCD Dataset. The original Metal and Plastic categories have been sub-divided into *Grade A and Grade B*, resulting in a 10-class problem. This model addresses the significant challenge of extreme data imbalance through cost-sensitive learning
 
 ## 1. Dataset Engineering
