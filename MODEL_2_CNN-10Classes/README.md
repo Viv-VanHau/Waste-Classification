@@ -80,7 +80,7 @@ The decision to refine grading specifically for Metal and Plastic within Reverse
 <img width="937" height="25" alt="image" src="https://github.com/user-attachments/assets/28497422-db2c-4b06-ac99-91658f20201a" />
 <img width="937" height="730" alt="image" src="https://github.com/user-attachments/assets/cb9e0584-0e62-4abd-ba50-083a31bfe12d" />
 
-*Fig 2. MODEL 2 -*
+*Fig 2. MODEL 2 - Performance Evaluation*
 <img width="580" height="350" alt="image" src="https://github.com/user-attachments/assets/89a9dd3e-974a-45a9-8e86-cec2940b50f7" />
 
 
