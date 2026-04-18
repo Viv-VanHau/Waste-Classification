@@ -38,7 +38,6 @@ The training process follows a rigorous Two-Phase approach:
 ## 4. Output:
 
 *Fig 1. Accuracy & Loss Learning Curves*
-
 <img width="1590" height="733" alt="image" src="https://github.com/user-attachments/assets/618ab40a-fb35-45a0-b9d3-cdbcccd535e4" />
 
 
@@ -55,12 +54,10 @@ The training process follows a rigorous Two-Phase approach:
 **4. Conclusion:** Model 1 training was highly successful. The implementation of Early Stopping at Epoch 23 prevented model degradation, ensuring that the final weights represent the best possible balance between bias and variance
 
 *Fig 2. MODEL 1 - Confusion Matrix (Validation Set)*
-
 <img width="1295" height="984" alt="image" src="https://github.com/user-attachments/assets/0b502102-00b9-48aa-95e0-7ec897787824" />
 
 
 *Fig 3. MODEL 1 - Performance Evaluation*
-
 <img width="885" height="511" alt="image" src="https://github.com/user-attachments/assets/ae805490-7835-4f87-9070-f3b9ff3aabda" />
 
 The model achieves a Global Accuracy of 95.11% on a balanced dataset of 12,800 images, demonstrating robust generalization across 8 material categories
@@ -80,14 +77,12 @@ Reasoning: The transparent and reflective properties of both materials create si
 The high Macro Average F1-score (0.95) confirms that the model is not biased towards specific classes. The integration of Global Max Pooling was likely instrumental in capturing the subtle specular highlights needed to differentiate metals and glass from more matte materials like organic waste
 
 *Fig 4: MODEL 1 - Random Successful Predictions*
-
 <img width="2124" height="1838" alt="image" src="https://github.com/user-attachments/assets/51db4566-c05e-4e95-a4ff-731850ea1542" />
 
 
 Figure 4 showcases the model's performance on unseen data. Most samples achieve a confidence score of 99-100%, indicating that the MobileNetV2 backbone has learned high-quality features for common waste objects like bottles, batteries, and metal cans
 
 *Fig 5. MODEL 1 - Error Diagnosis*
-
 <img width="2052" height="1634" alt="image" src="https://github.com/user-attachments/assets/bc54730c-b4a1-4432-b590-7e427d6c4cd3" />
 
 
