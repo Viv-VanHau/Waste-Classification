@@ -1,11 +1,12 @@
 # Waste Classification
-### Hầu Thanh Vân__Thesis Project
-### International University - Vietnam National University, Ho Chi Minh City
 
-Mô tả ngắn gọn về dự án ở đây (ví dụ: Dùng mạng CNN để phân loại 5 loại rác).
+This project used UWCD (Unified Waste Classification Dataset) - 8 classes of materials - Source: Kaggle, total images ~64k
 
-## 📁 Cấu trúc dự án (Structure)
+Waste-Classification-Training-Files/
 
-- 📂 `model/`: Chứa code định nghĩa mô hình và file README kết quả.
-- 📂 `preprocessing/`: Chứa code xử lý dữ liệu ảnh.
-- `README.md`: File hướng dẫn chính này.
+├── Backbone_Stage1_Final_9429    <-- CNN (MobileNetv2) 8 classes of material classification
+
+├── Stage2_10Classes_Best         <-- CNN (MobileNetv2) 10 classes (6 classes of materials + Grade A/B for Metal & Plastic)
+├── ... (các model khác)                             <-- Tạo folder này để chứa ảnh kết quả
+│   └── MobileNetV2_performance.png
+└── README.md                
