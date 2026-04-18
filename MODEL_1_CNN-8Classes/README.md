@@ -1,5 +1,4 @@
 ## 🛠 Quick Start
-- Find the model 'Backbone_Stage1_Final_9429.h5' at: 
 - Hardware: Google Colab (T4 GPU enabled)
 - Execution: Run the provided train.py. The best-performing model will be saved automatically as Backbone_Stage1_Final_9429.h5
 
