@@ -4,8 +4,16 @@ This project explores 5 deep learning models and 6 distinct system architectures
 
 ## 📂 Project Resources
 
-**Dataset & Pre-trained Models:** You can find the full training files, weights, and the UWCD dataset at the following link:
-👉 [Insert your Drive Link Here]             
+All models and datasets are hosted on Google Drive. Please note the different formats based on the architecture:
+
+- **Model 1 & 2 (CNN - MobileNetV2):** Provided as single .h5 files (Includes both architecture and weights)
+
+- **Model 3, 4, & 5 (VLM - Vision Transformer):** Provided as Integrated Folders
+These folders contain LoRA Adapters (compatible with Hugging Face peft library)
+
+To use them, you must download the entire folder for each model
+
+👉 [Link to Google Drive Repository]           
 
 ## 📚 Key References
 
