@@ -35,5 +35,5 @@ plt.yticks(rotation=0, fontsize=12)
 
 plt.tight_layout()
 
-cm_path = '/content/drive/MyDrive/Thesis_Project/Confusion_Matrix_Stage2_English.png'
+cm_path = '/content/drive/MyDrive/Thesis_Project/Confusion_Matrix_Model2.png'
 plt.savefig(cm_path, dpi=300, bbox_inches='tight')
