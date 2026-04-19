@@ -81,7 +81,7 @@ We evaluated 6 different architectural approaches to find the optimal balance be
 
 ### Architecture 6: Cross-Architectural Hierarchical Pipeline
 
-- Components: Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 5 - VLM 10 Classes)
+- Workflow: Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 5 - VLM 10 Classes)
 
 - Goal: Leverage the speed of CNNs for primary sorting and the massive parameter space of VLMs for secondary validation, ensuring the highest possible system-wide robustness and error recovery
 
