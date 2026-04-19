@@ -55,7 +55,7 @@ The original 8-class output layer was removed. A new Dense layer (10 neurons) wi
 
 This model implemented a granular classification for Metal and Plastic. Below is the specific criteria used for manual data labeling:
 
-<img width="870" height="206" alt="image" src="https://github.com/user-attachments/assets/5a08947e-7e5a-411a-8286-7ad93e653f86" />
+<img width="870" height="250" alt="image" src="https://github.com/user-attachments/assets/5a08947e-7e5a-411a-8286-7ad93e653f86" />
 
 ### Rationale: Why Focus Only on Metal & Plastic Grading?
 
@@ -81,7 +81,7 @@ The decision to refine grading specifically for Metal and Plastic within Reverse
 <img width="937" height="730" alt="image" src="https://github.com/user-attachments/assets/cb9e0584-0e62-4abd-ba50-083a31bfe12d" />
 
 *Fig 2. MODEL 2 - Performance Evaluation*
-<img width="580" height="350" alt="image" src="https://github.com/user-attachments/assets/89a9dd3e-974a-45a9-8e86-cec2940b50f7" />
+<img width="590" height="350" alt="image" src="https://github.com/user-attachments/assets/89a9dd3e-974a-45a9-8e86-cec2940b50f7" />
 
 
 - Global Accuracy: 94.61%
