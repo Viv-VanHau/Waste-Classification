@@ -32,8 +32,6 @@ To prepare the dataset for the subsequent Vision-Language Model (VLM) training, 
 ### Stage 5: Semantic Dataset Structuring for VLM Injection
 After the diagnostic phase, the "Hard Cases" are physically reorganized into a hierarchical directory structure. This structure is designed to facilitate Targeted Fine-Tuning for Model 3 (VLM)
 
-**1. Hierarchical Taxonomy Directory**
-
 The dataset is split into a multi-level hierarchy: Material Type → Error Root Cause
 
 - Plastic: Label_Interference, Specular_Reflection, Background_Bias, Boundary_Ambiguity
