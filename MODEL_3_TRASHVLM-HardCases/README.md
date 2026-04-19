@@ -92,6 +92,8 @@ To train a heavy Transformer model on consumer-grade hardware (GPU T4), we utili
 
 ### 5. Training Configuration
 
+- **Framework:** Integrated via 'Hugging Face Ecosystem' (Transformers, PEFT, Datasets, and BitsAndBytes)
+
 - **Base Architecture:** google/vit-base-patch16-224-in21k
 
 - **Optimization:** AdamW with Weight Decay (0.05)
