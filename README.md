@@ -47,7 +47,7 @@ This repository is organized into 5 primary modules, each representing a specifi
 
 ## 🔗 The 6 Research Architectures
 
-We evaluated 6 different architectural approaches to find the optimal balance between speed, safety, and economic recovery value:
+We evaluated 6 different architectural approaches to find the optimal balance between speed, safety, and recovery value:
 
 ### Architecture 1: Single-Stream CNN Baseline
 
