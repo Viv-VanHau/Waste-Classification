@@ -1,3 +1,7 @@
+## 🛠 Quick Start
+- Hardware: Google Colab (T4 GPU enabled)
+- Execution: Run the provided train.py. The best-performing model will be saved automatically as 'TrashVLM_Grading_Model.h5'
+
 TRASHVLM-Grading is a high-precision Vision Transformer (ViT) model dedicated solely to the hierarchical grading of high-value recyclables: Metal and Plastic. By isolating these categories from the general waste stream, this model performs a deep-dive quality assessment to distinguish between Grade A (Premium/Intact) and Grade B (Standard/Contaminated) materials.
 
 ## 1. Technical Methodology
