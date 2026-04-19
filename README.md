@@ -46,7 +46,7 @@ This repository is organized into 5 primary modules, each representing a specifi
 
 ## 🔗 The 8 Research Architectures
 
-We evaluated 6 different architectural approaches to find the optimal balance between speed, safety, and recovery value:
+We evaluated 8 architectural iterations to navigate the trade-offs between inference latency (FPS) and classification robustness (Accuracy):
 
 ### Architecture 1: Single-Stream CNN Baseline
 
