@@ -84,6 +84,12 @@ We evaluated 6 different architectural approaches to find the optimal balance be
 
 - Goal: Leverage the speed of CNNs for primary sorting and the massive parameter space of VLMs for secondary validation, ensuring the highest possible system-wide robustness and error recovery
 
+### Architecture 7: Double VLM Refinement Pipeline
+
+- Workflow: Stage 1 (Model 5 - VLM 10-Class) → Stage 2 (Model 4 - VLM 4-Class Grading)
+
+- Goal: To establish a "Double-Verification" system using two sequential Vision Transformers, especially for hard classes (Platic & Metal Grade A)
+
 ## 🛠️ Technical Stack
 
 - **Frameworks:** TensorFlow/Keras, PyTorch, Hugging Face Transformers
