@@ -43,7 +43,7 @@ Steady Convergence: Unlike the CNN models which exhibited fluctuations, the ViT 
 <img width="850" height="850" alt="image" src="https://github.com/user-attachments/assets/bec9597d-b5c5-45c3-ae41-d9040e605fdf" />
 
 *Fig 3. MODEL 5 - Performance Evaluation*
-<img width="650" height="380" alt="image" src="https://github.com/user-attachments/assets/e1110226-159e-471b-b64f-45496f719d82" />
+<img width="650" height="400" alt="image" src="https://github.com/user-attachments/assets/e1110226-159e-471b-b64f-45496f719d82" />
 
 By replacing the traditional CNN backbone with a Vision Transformer (ViT) and applying QLoRA Fine-tuning, we have achieved the highest performance across the entire 10-class hierarchy: 
 
