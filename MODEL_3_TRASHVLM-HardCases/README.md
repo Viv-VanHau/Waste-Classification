@@ -45,5 +45,6 @@ The following table summarizes the automated diagnostic results for the detected
 *Figure 3. Grad-CAM for error analysis - Metal Cases*
 <img width="1834" height="1329" alt="image" src="https://github.com/user-attachments/assets/3bacd419-6df0-46a3-bf3e-ed11878611c4" />
 
-
+Before proceeding to Model 3 training, we performed a "Targeted Buffing" to ensure data sufficiency for the Vision-Language Model:
+<img width="550" height="120" alt="image" src="https://github.com/user-attachments/assets/6952a409-949d-4d58-92de-f48b107389dc" />
 
