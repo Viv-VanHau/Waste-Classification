@@ -12,7 +12,7 @@ This project explores 5 deep learning models and 6 distinct system architectures
 If you find this work useful for your research, please refer to the following datasets and foundational papers:
 
 
-## System Components (The 5 Core Models)
+## 💠 System Components (The 5 Core Models)
 
 This repository is organized into 5 primary modules, each representing a specific stage of research:
 
@@ -26,7 +26,7 @@ This repository is organized into 5 primary modules, each representing a specifi
 
 **MODEL 5:** TrashVLM-10Classes - 10-Class Vision Transformer (Material + A/B Grading for Plastic & Metal)
 
-## The 6 Research Architectures
+## 🔗 The 6 Research Architectures
 
 We evaluated 6 different architectural approaches to find the optimal balance between speed, safety, and economic recovery value:
 
