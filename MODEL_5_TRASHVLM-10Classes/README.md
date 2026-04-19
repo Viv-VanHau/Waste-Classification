@@ -1,3 +1,7 @@
+## 🛠 Quick Start
+- Hardware: Google Colab (T4 GPU enabled)
+- Execution: Run the provided train.py. The best-performing model will be saved automatically as 'TrashVLM_10_Classes_Model.h5'
+
 TRASHVLM-10Classes represents the pinnacle of our classification hierarchy. It leverages the high-capacity Vision Transformer (ViT) architecture to perform end-to-end classification and quality grading (Grade A/B) across the entire UWCD Dataset spectrum.
 
 ## 1. Technical Architecture
