@@ -13,7 +13,7 @@ These folders contain LoRA Adapters (compatible with Hugging Face peft library)
 
 To use them, you must download the entire folder for each model
 
-👉 [Link to Google Drive Repository]           
+👉 https://drive.google.com/drive/folders/1OjmOsKOakRivIvJmrcQtkmwNkQH3bOsR?usp=drive_link
 
 ## 📚 Key References
 
