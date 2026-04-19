@@ -44,7 +44,7 @@ This repository is organized into 5 primary modules, each representing a specifi
 
 **MODEL 5:** TrashVLM-10Classes - 10-Class Vision Transformer (Material + A/B Grading for Plastic & Metal)
 
-## 🔗 The 6 Research Architectures
+## 🔗 The 8 Research Architectures
 
 We evaluated 6 different architectural approaches to find the optimal balance between speed, safety, and recovery value:
 
@@ -52,43 +52,49 @@ We evaluated 6 different architectural approaches to find the optimal balance be
 
 - Component: Model 2 (CNN 10 Classes)
 
-- Goal: Establish a baseline for all-in-one classification and grading using a mobile-optimized CNN architecture
+- Description: A standard end-to-end convolutional neural network serving as the control baseline for integrated material classification and quality grading
 
-### Architecture 2: Dual-Stage Sequential CNN
+### Architecture 2: Hierarchical CNN Pipeline
 
 - Workflow: Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 2 - CNN 10 Classes)
 
-- Goal: Implement a tiered filtering system where basic material identification precedes granular quality grading to reduce feature interference
+- Description: A two-stage sequential approach designed to mitigate feature interference by separating primary material identification from granular grading
 
-### Architecture 3: Confidence-Routed Hybrid System
+### Architecture 3: Confidence-based Hybrid Routing
 
 - Workflow: Stage 1 (Model 2 - CNN 10 Classes) → Stage 2 (Model 3 - TrashVLM Hardcases)
 
-- Logic: Employs Conditional Inference. If Stage 1 confidence is < 0.85, the "Hard Case" is routed to the VLM for expert-level diagnostic resolution
+- Logic: Employs Conditional Inference. If Stage 1 confidence is < 0.85, the "Hard Case" is routed to the VLM for diagnostic resolution
 
-### Architecture 4: Precision Grading Pipeline
+### Architecture 4: Decoupled VLM Grading
 
-- Workflow: Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 4 - TrashVLM Grading)
+- Workflow: Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 4 - VLM Grading)
 
-- Goal: Identifying basic materials first, then using a specialized VLM to ensure maximum precision for high-value Metal and Plastic grades
+- Description: A heterogeneous pipeline where a lightweight CNN handles general classification, while a specialized VLM focuses on grading (Metal/Plastic)
 
-### Architecture 5: End-to-End Vision Transformer (ViT)
+### Architecture 5: Monolithic Vision Transformer (ViT)
 
-- Component: Model 5 (TrashVLM 10 Classes)
+- Component: Model 5 (VLM 10 Classes)
 
-- Goal: Testing the power of Self-Attention as a single-stage solution for both material classification and grading
+- Description: An end-to-end Transformer-based model leveraging global self-attention mechanisms to process all categories in a single inference pass
 
-### Architecture 6: Cross-Architectural Hierarchical Pipeline
+### Architecture 6: Cross-Framework Integration
 
 - Workflow: Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 5 - VLM 10 Classes)
 
-- Goal: Leverage the speed of CNNs for primary sorting and the massive parameter space of VLMs for secondary validation, ensuring the highest possible system-wide robustness and error recovery
+- Description: A hierarchical system combining the computational efficiency of CNNs for initial filtering with the robust parameter space of VLMs for final verification
 
-### Architecture 7: Double VLM Refinement Pipeline
+### Architecture 7: Sequential Transformer Refinement
 
 - Workflow: Stage 1 (Model 5 - VLM 10-Class) → Stage 2 (Model 4 - VLM 4-Class Grading)
 
-- Goal: To establish a "Double-Verification" system using two sequential Vision Transformers, especially for hard classes (Platic & Metal Grade A)
+- Description: A dual-stage Transformer pipeline utilizing a primary VLM for broad categorization and a secondary VLM for high-precision refinement of complex subclasses
+
+### Architecture 8: Weighted Softmax Ensemble
+
+- Workflow: Weighted Voting [Model 2 - CNN 10 + Model 5 - VLM 10] → Model 4 - VLM 4-Class Grading (Tie-breaker)
+
+- Description: A multi-model ensemble system. Merges probabilistic outputs from all architectures using weighted voting to eliminate misclassification noise. This architecture aims to reach the theoretical performance ceiling by minimizing individual model bias.
 
 ## 🛠️ Technical Stack
 
