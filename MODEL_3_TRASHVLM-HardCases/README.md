@@ -42,7 +42,7 @@ The following table summarizes the automated diagnostic results for the detected
 *Figure 2. Highly Confident Prediction Cases*
 <img width="2308" height="1283" alt="image" src="https://github.com/user-attachments/assets/a09d3019-a698-4179-9b02-d4dc6dd97f5a" />
 
-*Figure 3. Grad-CAM for error analysis*
+*Figure 3. Grad-CAM for error analysis - Metal Cases*
 <img width="1834" height="1329" alt="image" src="https://github.com/user-attachments/assets/3bacd419-6df0-46a3-bf3e-ed11878611c4" />
 
 
