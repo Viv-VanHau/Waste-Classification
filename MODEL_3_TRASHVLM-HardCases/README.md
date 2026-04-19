@@ -46,7 +46,63 @@ To assist in error-specific analysis during VLM training, each file is renamed u
 
 By structuring the data this way, we enable Model 3 to perform "Failure-Aware Learning." The VLM can now process images not just as raw pixels, but as specific examples of CNN failures. This structured repository at Stage6_VLM_Training_Data serves as the primary knowledge base for the subsequent VLM fine-tuning process, aiming to resolve the "Hard Cases" that traditional CNNs cannot handle
 
-## 2. Pre-processing Output
+## 2. Training Techniques
+
+### 1. Multi-Stream Data Pipeline & CLAHE
+
+Model 3 uses an Error-Aware Pipeline
+
+- **Contrast Limited Adaptive Histogram Equalization (CLAHE):** Integrated specifically for images tagged with *Specular_Reflection*
+
+- **Mechanism:** By converting images to LAB color space and applying CLAHE to the L-channel (Lightness), the model effectively neutralizes underwater glare and light scattering, restoring hidden textures on metallic and plastic surfaces
+
+### 2. Adaptive Transform Strategy
+
+We implemented a dynamic augmentation strategy where the transformation type is determined by the Error Root Cause identified in the previous stage:
+
+- **Specular Reflection:** Applied CLAHE + Standard Augmentation
+
+- **Label Interference & Background Bias:** Applied 'Heavy Crop Transforms (scale 0.5 - 0.8)' and 'Color Jitter'. This forces the Transformer to focus on local object patches rather than being distracted by complex backgrounds or overlapping labels
+
+- **Standard Errors:** Applied 'Random Resized Crops' and 'Horizontal Flips'
+
+### 3. Risk-Weighted Loss (WeightedTrainer)
+
+To align with industrial safety standards, we implemented a custom WeightedTrainer with a Security Coefficient (w) for high-risk materials:
+
+- Battery (w=20.0): Highest priority due to chemical leakage risks
+
+- Organic (w=15.0): High priority to prevent contamination of recyclable batches
+
+- Plastic_Grade_A (w=12.0): Priority based on high economic recovery value
+
+The model is penalized up to 20 times more for missing a Battery than a standard waste item
+
+### 4. Adaptive QLoRA (PEFT)
+
+To train a heavy Transformer model on consumer-grade hardware (GPU T4), we utilized Parameter-Efficient Fine-Tuning (PEFT):
+
+- **4-bit Quantization (NF4):** Uses BitsAndBytesConfig to compress the ViT-Base model, reducing VRAM usage by over 70% while maintaining 16-bit compute precision
+
+- **LoRA (Low-Rank Adaptation):**
+
+**Rank (r)=16, Alpha=64:** Injected trainable low-rank matrices into the query and value layers of the Attention mechanism
+
+**Trainable Modules:** Only the LoRA adapters and the final classifier head are updated, preserving the foundational "visual knowledge" of the pre-trained ViT
+
+### 5. Training Configuration
+
+- **Base Architecture:** google/vit-base-patch16-224-in21k
+
+- **Optimization:** AdamW with Weight Decay (0.05)
+
+- **Learning Rate:** 1e-4 with a Warmup Ratio (0.2) to stabilize early training on hard cases
+
+- **Epochs:** 70 (Iterative refinement)
+
+- **Batch Management:** Effective batch size of 32 (8 per device × 4 gradient accumulation steps)
+
+## 3. Pre-processing Output
 
 The following table summarizes the automated diagnostic results for the detected misclassifications:
 
