@@ -8,7 +8,7 @@ Utilized the best weights from Model 2 (Stage2_10Classes_Best.h5) to perform inf
 
 ### Stage 2: XAI Diagnosis (Grad-CAM)
 
-To understand "Why the model failed," I implemented Gradient-weighted Class Activation Mapping (Grad-CAM)
+To understand "Why the model failed," we implemented Gradient-weighted Class Activation Mapping (Grad-CAM)
 
 - **Mechanism:** extracted gradients from the last convolutional layer of the MobileNetV2 backbone
 - **Purpose:** By visualizing the "Heatmaps" of misclassified images, I identified whether the model was focusing on the actual object or was distracted by background noise and reflections
@@ -27,7 +27,26 @@ Developed an automated diagnostic engine using OpenCV to categorize errors into 
 
 ### Stage 4: Strategic Oversampling (Targeted Buffing)
 
-To prepare the dataset for the subsequent Vision-Language Model (VLM) training, I implemented a targeted oversampling strategy to balance the "Hard Case" distribution, ensuring at least 50 samples per minority error class.
+To prepare the dataset for the subsequent Vision-Language Model (VLM) training, I implemented a targeted oversampling strategy to balance the "Hard Case" distribution, ensuring at least 50 samples per minority error class
+
+### Stage 5: Semantic Dataset Structuring for VLM Injection
+After the diagnostic phase, the "Hard Cases" are physically reorganized into a hierarchical directory structure. This structure is designed to facilitate Targeted Fine-Tuning for Model 3 (VLM)
+
+**1. Hierarchical Taxonomy Directory**
+
+The dataset is split into a multi-level hierarchy: Material Type → Error Root Cause
+
+- Plastic: Label_Interference, Specular_Reflection, Background_Bias, Boundary_Ambiguity
+
+- Metal: Label_Interference, Specular_Reflection, Background_Bias, Boundary_Ambiguity
+
+To assist in error-specific analysis during VLM training, each file is renamed using a strictly formatted metadata string:
+
+- Format: True-{Label}___Pred-{Label}___Conf-{Score}_{Original_Name}
+
+- Example: True-plastic_Grade_A___Pred-paper_cardboard___Conf-98.6_img_102.jpg
+
+By structuring the data this way, we enable Model 3 to perform "Failure-Aware Learning." The VLM can now process images not just as raw pixels, but as specific examples of CNN failures. This structured repository at Stage6_VLM_Training_Data serves as the primary knowledge base for the subsequent VLM fine-tuning process, aiming to resolve the "Hard Cases" that traditional CNNs cannot handle
 
 ## 2. Pre-processing Output
 
