@@ -92,7 +92,7 @@ We evaluated 6 different architectural approaches to find the optimal balance be
 
 ### Architecture 8: Weighted Softmax Ensemble
 
-- Workflow: Weighted Voting [Model 2 - CNN 10 + Model 5 - VLM 10] → Model 4 - VLM 4-Class Grading (Tie-breaker)
+- Workflow: Weighted Voting [Model 2 - CNN 10 Classes + Model 5 - VLM 10 classes] → Model 4 - VLM 4-Class Grading (Tie-breaker)
 
 - Description: A multi-model ensemble system. Merges probabilistic outputs from all architectures using weighted voting to eliminate misclassification noise. This architecture aims to reach the theoretical performance ceiling by minimizing individual model bias.
 
