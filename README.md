@@ -8,8 +8,7 @@ All models and datasets are hosted on Google Drive. Please note the different fo
 
 - **Model 1 & 2 (CNN - MobileNetV2):** Provided as single .h5 files (Includes both architecture and weights)
 
-- **Model 3, 4, & 5 (VLM - Vision Transformer):** Provided as Integrated Folders
-These folders contain LoRA Adapters (compatible with Hugging Face peft library)
+- **Model 3, 4, & 5 (VLM - Vision Transformer):** Provided as Integrated Folders. These folders contain LoRA Adapters (compatible with Hugging Face peft library)
 
 To use them, you must download the entire folder for each model
 
