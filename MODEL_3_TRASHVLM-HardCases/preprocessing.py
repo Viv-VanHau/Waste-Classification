@@ -439,3 +439,45 @@ for class_name, file_paths in class_files.items():
             shutil.copy(src_path, dst_path)
 
 print("Done buffing")
+
+# ================================================
+# 5. SAVING DRIVE FOLDERS FOLLOWING TYPES OF ERROR
+# ================================================
+import os
+import shutil
+from tqdm.auto import tqdm
+
+stage6_dataset_dir = os.path.join(output_dir, 'Stage6_VLM_Training_Data')
+error_types = ['Label_Interference', 'Specular_Reflection', 'Background_Bias', 'Boundary_Ambiguity']
+materials = ['Plastic', 'Metal']
+
+for mat in materials:
+    for err in error_types:
+        os.makedirs(os.path.join(stage6_dataset_dir, mat, err), exist_ok=True)
+
+def categorize_and_save_errors(misclassified_list, material_name):
+    for item in tqdm(misclassified_list, desc=f"Chia folder cho {material_name}"):
+        original_path = item['path']
+        pred_idx = class_labels.index(item['pred_name'])
+
+        cause = diagnose_error_cause(original_path, grad_model, pred_idx)
+
+        folder_cause = cause.replace(" ", "_")
+        target_folder = os.path.join(stage6_dataset_dir, material_name, folder_cause)
+
+        base_name = os.path.basename(original_path)
+
+        true_name = item['true_name']
+        pred_name = item['pred_name']
+        conf = item['confidence']
+        new_name = f"True-{true_name}___Pred-{pred_name}___Conf-{conf:.1f}_{base_name}"
+        new_path = os.path.join(target_folder, new_name)
+
+        shutil.copy(original_path, new_path)
+
+categorize_and_save_errors(misclassified_plastic, "Plastic")
+categorize_and_save_errors(misclassified_metal, "Metal")
+
+print(f"\nFolders are splitted at:")
+print(f"📁 {stage6_dataset_dir}")
+print("Ready for training Model 3")
