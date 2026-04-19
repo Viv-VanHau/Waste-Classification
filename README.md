@@ -17,8 +17,17 @@ To use them, you must download the entire folder for each model
 
 ## 📚 Key References
 
-If you find this work useful for your research, please refer to the following datasets and foundational papers:
+If you find this work useful for your research, please refer to the foundational papers:
 
+**Application of MobileNetV2 to waste classification**
+L. Yong, L. Ma, D. Sun, and L. Du
+Published: March 16, 2023
+DOI: 10.1371/journal.pone.0282336
+
+**TrashVLM: Lightweight and Efficiently Fine-Tuned Vision-Language Models for Waste Classification**
+T. Trang, H. V. Pham, S. D. Vu, T. M. Le, H. M. Tran, and S. V. T. Dao
+2025 International Conference on Advanced Technologies for Communications (ATC)
+DOI: 10.1109/ATC67618.2025.11268574
 
 ## 💠 System Components (The 5 Core Models)
 
