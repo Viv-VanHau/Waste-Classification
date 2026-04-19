@@ -123,3 +123,32 @@ The following table summarizes the automated diagnostic results for the detected
 Before proceeding to Model 3 training, we performed a "Targeted Buffing" to ensure data sufficiency for the Vision-Language Model:
 <img width="550" height="120" alt="image" src="https://github.com/user-attachments/assets/6952a409-949d-4d58-92de-f48b107389dc" />
 
+## 4. Training Output
+
+*Fig 1. Textures before and after CLAHE*
+<img width="650" height="250" alt="image" src="https://github.com/user-attachments/assets/33d8ddcf-5469-4baf-8ad0-cd89c3b75abf" />
+<img width="650" height="250" alt="image" src="https://github.com/user-attachments/assets/6482dcc0-5a51-42e1-a118-2fd367a4677d" />
+
+*Fig 2. MODEL 3 - Training Curves*
+<img width="850" height="950" alt="image" src="https://github.com/user-attachments/assets/d7ebdb6b-ab6b-4b68-a633-4b6f06423364" />
+
+The learning process for the VLM exhibits a highly stable and progressive convergence:
+
+- **Loss Convergence:** The Training Loss started at a high baseline (~9.25) due to the complexity of the hard cases but dropped sharply, stabilizing below 1.0. The Validation Loss remained consistently low and smooth, indicating that the Low-Rank Adaptation (LoRA) effectively prevented "Catastrophic Forgetting" while fine-tuning on a small, niche dataset
+
+- **Accuracy Climb:** Starting from a near-zero baseline, the model reached a performance plateau of 83% at Epoch 44 (marked by the dashed line). The steady climb proves that the Adaptive CLAHE and Heavy-Crop transforms successfully guided the Transformer's attention to the relevant material textures
+
+*Fig 3. MODEL 3 - Confusion Matrix*
+<img width="550" height="580" alt="image" src="https://github.com/user-attachments/assets/b5043da7-3ee3-481b-8fca-1835c85e5fde" />
+
+*Fig 4. Model 3 - Performance Evaluation*
+<img width="550" height="250" alt="image" src="https://github.com/user-attachments/assets/1d994b00-13da-4ce9-bdc0-0d6c76457575" />
+
+The "Hard Examples Focus" matrix reveals the model's granular decision-making:
+
+- Metal Grade A: Outstanding Performance. The VLM excelled at identifying premium metal, even those previously confused by the CNN
+- Plastic Grade B:	Highly Robust. High precision confirms the model can distinguish standard plastic despite background noise
+- Plastic Grade A:	Moderate success. Scarcity (6 samples) remains the primary challenge for this category
+- Metal Grade B: The model struggled here due to extremely low support (4 samples) and high visual similarity to Trash
+
+While CNNs focus on local textures, the ViT’s Self-Attention mechanism allowed it to look at the "big picture", connecting disparate specular highlights to identify a material's true nature. By neutralizing reflections via CLAHE, we provided the VLM with a "cleaner" signal for the most difficult metallic and plastic surfaces. The high weights assigned to Metal and Plastic Grade A forced the model to prioritize these high-value streams, resulting in significantly higher Recall for premium recyclables.
