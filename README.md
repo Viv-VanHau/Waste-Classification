@@ -1,4 +1,4 @@
-# Waste Classification
+# Waste Classification & Quality Grading
 
 This project explores 5 deep learning models and 6 distinct system architectures to achieve high-precision waste classification and quality grading using the UWCD (Unified Waste Classification Dataset).
 
