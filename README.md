@@ -7,6 +7,11 @@ This project explores 5 deep learning models and 6 distinct system architectures
 **Dataset & Pre-trained Models:** You can find the full training files, weights, and the UWCD dataset at the following link:
 👉 [Insert your Drive Link Here]             
 
+## 📚 Key References
+
+If you find this work useful for your research, please refer to the following datasets and foundational papers:
+
+
 ## System Components (The 5 Core Models)
 
 This repository is organized into 5 primary modules, each representing a specific stage of research:
