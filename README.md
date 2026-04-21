@@ -84,13 +84,19 @@ We evaluated 8 architectural iterations to navigate the trade-offs between infer
 
 - Description: A hierarchical system combining the computational efficiency of CNNs for initial filtering with the robust parameter space of VLMs for final verification
 
-### Architecture 7: Sequential Transformer Refinement
+### Architecture 7: Sequential Hybrid Verification
+
+- Workflow: Stage 1 (Model 2 - CNN 10 Classes) → Stage 2 (Model 5 - VLM 10 Classes)
+
+- Description: A complete dual-stage pipeline where every input undergoes a "double-check" process
+
+### Architecture 8: Sequential Transformer Refinement
 
 - Workflow: Stage 1 (Model 5 - VLM 10-Class) → Stage 2 (Model 4 - VLM 4-Class Grading)
 
 - Description: A dual-stage Transformer pipeline utilizing a primary VLM for broad categorization and a secondary VLM for high-precision refinement of complex subclasses
 
-### Architecture 8: Weighted Softmax Ensemble
+### Architecture 9: Weighted Softmax Ensemble
 
 - Workflow: Weighted Voting [Model 2 - CNN 10 Classes + Model 5 - VLM 10 classes] → Model 4 - VLM 4-Class Grading (Tie-breaker)
 
