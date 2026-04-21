@@ -20,7 +20,7 @@ from matplotlib.colors import LinearSegmentedColormap
 zip_path = 'your_path'
 extract_dir = 'your_path'
 model_path = '/content/drive/MyDrive/Thesis_Project/Stage2_10Classes_Best.h5'
-output_dir = '/content/drive/MyDrive/Thesis_Project/Benchmark_Test_50_Results/Architecture_1'
+output_dir = 'your_path'
 
 os.makedirs(output_dir, exist_ok=True)
 
