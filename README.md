@@ -46,7 +46,7 @@ This repository is organized into 5 primary modules, each representing a specifi
 
 ## 🔗 9 Research Architectures
 
-We evaluated 8 architectural iterations to navigate the trade-offs between inference latency (FPS) and classification robustness (Accuracy):
+We evaluated 9 architectural iterations to navigate the trade-offs between inference latency (FPS) and classification robustness (Accuracy):
 
 ### Architecture 1: Single-Stream CNN Baseline
 
@@ -111,5 +111,3 @@ We evaluated 8 architectural iterations to navigate the trade-offs between infer
 - **Backbones:** MobileNetV2, ViT-Base-Patch16-224
 
 - **XAI:** Grad-CAM for error root-cause diagnosis
-
-***Note:** This project is part of a research thesis on intelligent Reverse Logistics and automated waste sorting systems*
