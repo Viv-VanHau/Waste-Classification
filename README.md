@@ -1,4 +1,4 @@
-# Waste Classification & Quality Grading
+# A Comparative Study of Multi-Stage Lightweight CNN and Vision Transformer Approaches for Waste Classification and Grading
 
 This project explores 5 deep learning models and 6 distinct system architectures to achieve high-precision waste classification and quality grading using the UWCD (Unified Waste Classification Dataset).
 
@@ -30,7 +30,7 @@ If you find this work useful for your research, please refer to the foundational
 - 2025 International Conference on Advanced Technologies for Communications (ATC)
 - DOI: 10.1109/ATC67618.2025.11268574
 
-## 💠 System Components (The 5 Core Models)
+## 💠 System Components (5 Core Models)
 
 This repository is organized into 5 primary modules, each representing a specific stage of research:
 
@@ -44,7 +44,7 @@ This repository is organized into 5 primary modules, each representing a specifi
 
 **MODEL 5:** TrashVLM-10Classes - 10-Class Vision Transformer (Material + A/B Grading for Plastic & Metal)
 
-## 🔗 The 8 Research Architectures
+## 🔗 9 Research Architectures
 
 We evaluated 8 architectural iterations to navigate the trade-offs between inference latency (FPS) and classification robustness (Accuracy):
 
