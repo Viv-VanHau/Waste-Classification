@@ -17,10 +17,10 @@ from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from matplotlib.colors import LinearSegmentedColormap
 
 # 1. Define Paths
-zip_path = 'your_path'
-extract_dir = 'your_path'
+zip_path = '/content/drive/MyDrive/Thesis_Project/Base_Test.zip'
+extract_dir = '/content/Base_Test_Data'
 model_path = '/content/drive/MyDrive/Thesis_Project/Stage2_10Classes_Best.h5'
-output_dir = 'your_path'
+output_dir = '/content/drive/MyDrive/Thesis_Project/Base_Test_Results'
 
 os.makedirs(output_dir, exist_ok=True)
 
@@ -88,6 +88,7 @@ print("="*60)
 report_str = classification_report(y_true, y_pred, target_names=class_labels, digits=4)
 print(report_str)
 
+# Save text report for thesis documentation
 report_path = os.path.join(output_dir, 'Architecture_1_Classification_Report.txt')
 with open(report_path, 'w') as f:
     f.write("ARCHITECTURE 1: SINGLE-STREAM CNN BASELINE\n")
@@ -100,6 +101,7 @@ with open(report_path, 'w') as f:
 # 8. Visualizations
 
 # 8.1 Confusion Matrix
+
 cm = confusion_matrix(y_true, y_pred)
 
 colors = ["#ffffff", "#e3f2fd", "#90caf9", "#42a5f5", "#1565c0"]
@@ -126,6 +128,7 @@ plt.savefig(cm_save_path, dpi=300, bbox_inches='tight')
 plt.close()
 
 # 8.2 F1-Score Bar Chart
+
 f1_scores = f1_score(y_true, y_pred, average=None)
 
 plt.figure(figsize=(12, 6))
