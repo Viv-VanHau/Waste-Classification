@@ -1,9 +1,9 @@
 | Iteration   | Core Software Mechanism     | Overall Accuracy | Inference Speed | Metal Grade A (Recall) | Key Architectural Insight |
 |------------|----------------------------|------------------|-----------------|------------------------|---------------------------|
-| Base Arch 2 | Rigid Sequential Routing   | 78.00%           | 7.32 FPS        | 0.0800                 | Suffers heavily from cascading errors. If Stage 1 misclassifies, the error is locked in |
+| Base Arch 2 | Rigid Sequential Routing   | 78.00%           | **7.32 FPS**        | 0.0800                 | Suffers heavily from cascading errors. If Stage 1 misclassifies, the error is locked in |
 | Test 1      | Confidence-Based Fallback  | 77.50%           | 6.25 FPS        | 0.0900                 | Unconstrained Stage 2 corrupts correct base predictions; heavy computational penalty |
 | Test 2      | Strict Logit Masking       | 79.30%           | 7.01 FPS        | 0.0800                 | Successfully protects base accuracy, but definitively exposes the CNN's inability to grade |
-| Test 3      | Threshold Calibration      | 82.20%           | 6.97 FPS        | 0.3100                 | Reaches the absolute operational ceiling of a pure CNN pipeline by correcting class bias |
+| **Test 3**      | Threshold Calibration      | **82.20%**           | 6.97 FPS        | **0.3100**                 | Reaches the absolute operational ceiling of a pure CNN pipeline by correcting class bias |
 ## Architecture 2: Dual-Stage Sequential CNN
 
 - **Role:** First iteration of a multi-stage pipeline, designed to decouple base material filtering from quality grading
