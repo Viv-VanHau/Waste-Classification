@@ -1,4 +1,4 @@
-##Architecture 2: Dual-Stage Sequential CNN
+## Architecture 2: Dual-Stage Sequential CNN
 
 - **Role:** First iteration of a multi-stage pipeline, designed to decouple base material filtering from quality grading
 
