@@ -143,4 +143,4 @@ Despite the smarter software logic, the core classification flaw remains untouch
 
 → Advanced routing logic cannot fix a fundamentally incapable feature extractor. Even when routed correctly, the Stage 2 CNN still cannot resolve the fine-grained surface defects required for A/B grading.
 
-Test Implication: The confidence < 0.90 heuristic proves that multi-stage pipelines require uncertainty assessment to function reliably.
+**Test Implication:** The confidence < 0.90 heuristic proves that multi-stage pipelines require uncertainty assessment to function reliably.
