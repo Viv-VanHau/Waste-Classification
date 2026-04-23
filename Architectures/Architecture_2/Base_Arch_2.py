@@ -15,11 +15,11 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from matplotlib.colors import LinearSegmentedColormap
 
-# 1. Define Paths & Hardcoded Classes (BULLETPROOF MAPPING)
-extract_dir = 'your_path'
+# 1. Define Paths
+extract_dir = '/content/Base_Test_Data'
 model_stage1_path = '/content/drive/MyDrive/Thesis_Project/Backbone_Stage1_Final_9429.h5'
 model_stage2_path = '/content/drive/MyDrive/Thesis_Project/Stage2_10Classes_Best.h5'
-output_dir = 'your_path'
+output_dir = '/content/drive/MyDrive/Thesis_Project/Base_Test_Results'
 
 os.makedirs(output_dir, exist_ok=True)
 
@@ -51,7 +51,7 @@ test_generator = test_datagen.flow_from_directory(
     test_dir,
     target_size=(224, 224),
     batch_size=1,
-    classes=s2_classes,
+    classes=s2_classes, # Force strict ordering
     class_mode='categorical',
     shuffle=False
 )
@@ -191,7 +191,7 @@ cm_save_path = os.path.join(output_dir, 'Arch2_Confusion_Matrix_Green.png')
 plt.savefig(cm_save_path, dpi=300, bbox_inches='tight')
 plt.close()
 
-# 9.2 F1-Score Bar Chart
+# F1-Score Bar Chart
 f1_scores = f1_score(y_true, y_pred, average=None, labels=s2_classes)
 
 plt.figure(figsize=(12, 6))
@@ -213,3 +213,110 @@ plt.savefig(f1_save_path, dpi=300, bbox_inches='tight')
 plt.close()
 
 print(f"Process Complete, outputs saved to: {output_dir}")
+
+# ================================================================================
+# EXTRA EVALUATION ARCH 2: PURE WASTE CLASSIFICATION (8 CLASSES - IGNORING GRADES)
+# ================================================================================
+
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, f1_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib.colors import LinearSegmentedColormap
+import os
+
+print("\n" + "="*80)
+print("EXTRA EVALUATION: PURE WASTE CLASSIFICATION (NO GRADING)")
+print("="*80)
+
+output_dir = '/content/drive/MyDrive/Thesis_Project/Base_Test_Results'
+report_path = os.path.join(output_dir, 'Architecture_2_Classification_Report.txt')
+
+# 1. Define the mapping logic (Merging grades into parent materials)
+category_mapping = {
+    'battery': 'battery',
+    'glass': 'glass',
+    'metal_Grade_A': 'metal',     # Merge A
+    'metal_Grade_B': 'metal',     # Merge B
+    'organic_waste': 'organic_waste',
+    'paper_cardboard': 'paper_cardboard',
+    'plastic_Grade_A': 'plastic', # Merge A
+    'plastic_Grade_B': 'plastic', # Merge B
+    'textiles': 'textiles',
+    'trash': 'trash'
+}
+
+# 2. Arch 2, y_true và y_pred are String, directly mapping
+y_true_base = [category_mapping[label] for label in y_true]
+y_pred_base = [category_mapping[label] for label in y_pred]
+
+# 3. Get unique base classes for the new report (8 classes)
+base_classes = sorted(list(set(category_mapping.values())))
+
+# 4. Calculate new metrics
+base_accuracy = accuracy_score(y_true_base, y_pred_base)
+print(f"Accuracy (Classification Only - No Grading): {base_accuracy * 100:.2f}%\n")
+
+base_report = classification_report(y_true_base, y_pred_base, target_names=base_classes, digits=4)
+print(base_report)
+
+# 5. Append this finding to the text report
+with open(report_path, 'a') as f:
+    f.write("\n\n" + "*"*60 + "\n")
+    f.write("EXTRA: PURE WASTE CLASSIFICATION (8 CLASSES - NO GRADING)\n")
+    f.write("*"*60 + "\n")
+    f.write(f"Pure Classification Accuracy: {base_accuracy * 100:.2f}%\n\n")
+    f.write(base_report)
+
+# 6. Generate Visualizations for 8-Class Evaluation
+
+# 6.1 Confusion Matrix
+print("\nGenerating 8-Class Confusion Matrix for Arch 2...")
+cm_base = confusion_matrix(y_true_base, y_pred_base, labels=base_classes)
+
+teal_colors = ["#ffffff", "#e0f2f1", "#80cbc4", "#26a69a", "#00695c"]
+custom_teal_cmap = LinearSegmentedColormap.from_list("custom_teal", teal_colors, N=256)
+
+plt.figure(figsize=(12, 9))
+sns.set_theme(style="white")
+
+ax = sns.heatmap(cm_base, annot=True, fmt='d', cmap=custom_teal_cmap,
+                 xticklabels=base_classes, yticklabels=base_classes,
+                 annot_kws={"size": 12, "weight": "bold", "family": "serif"},
+                 linewidths=0, cbar=True)
+
+plt.title('Architecture 2: Pure Classification (8 Classes)',
+          fontsize=18, fontweight='bold', pad=25, family='serif', color='#004d40')
+plt.ylabel('Actual Category', fontsize=14, fontweight='bold', family='serif')
+plt.xlabel('AI Predicted Category', fontsize=14, fontweight='bold', family='serif')
+plt.xticks(rotation=45, ha='right', fontsize=11)
+plt.yticks(rotation=0, fontsize=11)
+plt.tight_layout()
+
+cm_base_save_path = os.path.join(output_dir, 'Arch2_BaseClassification_CM_Teal.png')
+plt.savefig(cm_base_save_path, dpi=300, bbox_inches='tight')
+plt.close()
+
+# 6.2 F1-Score Bar Chart
+print("Generating 8-Class F1-Score Chart for Arch 2...")
+f1_scores_base = f1_score(y_true_base, y_pred_base, average=None, labels=base_classes)
+
+plt.figure(figsize=(10, 5))
+sns.set_theme(style="whitegrid")
+bars = plt.bar(base_classes, f1_scores_base, color='#26a69a', edgecolor='#00695c', linewidth=1.5)
+
+plt.title('Architecture 2: Pure Classification F1-Score', fontsize=16, fontweight='bold', family='serif', pad=20)
+plt.ylabel('F1-Score', fontsize=12, fontweight='bold', family='serif')
+plt.ylim(0, 1.1)
+plt.xticks(rotation=45, ha='right', fontsize=11)
+
+for bar in bars:
+    yval = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2, yval + 0.02, f'{yval:.4f}', ha='center', va='bottom', fontsize=10, fontweight='bold')
+
+plt.tight_layout()
+
+f1_base_save_path = os.path.join(output_dir, 'Arch2_BaseClassification_F1_Chart.png')
+plt.savefig(f1_base_save_path, dpi=300, bbox_inches='tight')
+plt.close()
+
+print(f"Extra evaluation saved to: {output_dir}")
