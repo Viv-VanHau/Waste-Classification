@@ -88,13 +88,13 @@ To fully exhaust the potential of hierarchical pipelines before transitioning to
 
 ### Inference Logic & Routing Setup
 
-**Stage 1 (Primary):** MobileNetV2 (8-class) outputs a base material prediction alongside a statistical confidence score
+- **Stage 1 (Primary):** MobileNetV2 (8-class) outputs a base material prediction alongside a statistical confidence score
 
-**Trigger A (Mandatory Grading):** If Stage 1 predicts metal or plastic $\rightarrow$ Route to Stage 2 for A/B quality assessment
+- **Trigger A (Mandatory Grading):** If Stage 1 predicts metal or plastic $\rightarrow$ Route to Stage 2 for A/B quality assessment
 
-**Trigger B (Uncertainty Fallback):** If Stage 1 predicts another material, BUT confidence is < 0.90 → Route to Stage 2 as a safety verification
+- **Trigger B (Uncertainty Fallback):** If Stage 1 predicts another material, BUT confidence is < 0.90 → Route to Stage 2 as a safety verification
 
-**Fast-Path (Bypass):** If Stage 1 predicts another material AND confidence is >= 0.90 → Bypass Stage 2 and finalize output
+- **Fast-Path (Bypass):** If Stage 1 predicts another material AND confidence is >= 0.90 → Bypass Stage 2 and finalize output
 
 ### System Performance Metrics
 
