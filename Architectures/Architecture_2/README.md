@@ -143,4 +143,65 @@ Despite the smarter software logic, the core classification flaw remains untouch
 
 → Advanced routing logic cannot fix a fundamentally incapable feature extractor. Even when routed correctly, the Stage 2 CNN still cannot resolve the fine-grained surface defects required for A/B grading.
 
-**Test Implication:** The confidence < 0.90 heuristic proves that multi-stage pipelines require uncertainty assessment to function reliably.
+## Architecture 2 - Test 2: Strict Constrained Routing (Logit Masking)
+
+**Motivation for Test 2:** Analysis of previous iterations revealed a critical system vulnerability: 
+
+Stage 2 (the 10-class CNN) is demonstrably inferior at pure material classification compared to the specialized Stage 1 model. 
+
+When granted the authority to override Stage 1 (as seen in Test 1), Stage 2 frequently corrupted correct base predictions, causing the overall accuracy to regress. 
+
+Test 2 is designed to patch this vulnerability by completely revoking Stage 2's authority over base material classification, forcing it to act strictly as a grading sub-routine.
+
+- **Role:** Correcting the authorization flaw of the secondary model by mathematically restricting its prediction domain.
+
+- **Design Paradigm:** Deterministic Logit Masking / Hard-Constrained Routing.
+
+- **Core Task:** Isolate the grading task by forcing the secondary CNN to obey the base material prediction of Stage 1, thereby preventing out-of-domain cascading errors.
+
+### Inference Logic & Routing Setup
+
+- **Authoritative Base Prediction:** Stage 1 evaluates the input. Whatever base material Stage 1 predicts is locked in as the absolute ground truth for the remainder of the pipeline.
+
+- **Sub-routine Activation:** If Stage 1 predicts metal or plastic, Stage 2 is invoked to determine the A/B quality grade
+
+- **Logit Masking (Probability Suppression):** To prevent Stage 2 from overriding the base material, the pipeline intercepts its softmax output array. The probabilities of all classes outside the Stage 1 domain are forcefully set to 0.
+
+*Example:* If Stage 1 predicts metal, Stage 2 is mathematically restricted to choosing between metal_Grade_A and metal_Grade_B. Even if Stage 2's internal features strongly activate for glass, that probability is suppressed, forcing a localized grading decision.
+
+### System Performance Metrics
+
+*Architecture 2 Test 2*
+<img width="510" height="480" alt="image" src="https://github.com/user-attachments/assets/1a176d24-ff1a-4613-abfe-841b86a093d3" />
+
+- Average Latency: 142.66 ms / image
+
+- Frame Rate: 7.01 FPS
+
+- Stage 2 Utilization: 375 / 1000 samples
+
+- Masked Corrections: 27 out-of-domain Stage 2 predictions were successfully suppressed by the masking logic
+
+- Overall Accuracy: 79.30%
+
+### Key Findings
+
+**1. Successful Protection of Base Material Accuracy**
+
+By stripping Stage 2 of its ability to predict base materials, the pipeline successfully halted the error propagation observed in previous tests:
+
+- The masking logic intercepted and suppressed 27 "rogue" predictions where Stage 2 attempted to guess an entirely different material than Stage 1
+
+- This strict constraint drove the overall pipeline accuracy up to 79.30%
+
+**2. The CNN Grading Ceiling is Absolute**
+
+While the masking logic perfectly isolated the grading task and protected the base accuracy, it exposed a grim reality regarding the feature extractor:
+
+- Metal Grade A Recall remains paralyzed at a catastrophic 0.0800
+
+- Plastic Grade A Recall barely shifted, hovering at 0.5600.
+
+We artificially simulated a perfect "Grading Only" environment for Stage 2, yet it still failed to differentiate Grade A from Grade B → This isolates the variable: the failure is not due to flawed pipeline routing, but rather the CNN's fundamental inability to perform fine-grained surface evaluation.
+
+
