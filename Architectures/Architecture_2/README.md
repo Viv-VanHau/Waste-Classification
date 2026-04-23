@@ -200,8 +200,34 @@ While the masking logic perfectly isolated the grading task and protected the ba
 
 - Metal Grade A Recall remains paralyzed at a catastrophic 0.0800
 
-- Plastic Grade A Recall barely shifted, hovering at 0.5600.
+- Plastic Grade A Recall barely shifted, hovering at 0.5600
 
 We artificially simulated a perfect "Grading Only" environment for Stage 2, yet it still failed to differentiate Grade A from Grade B → This isolates the variable: the failure is not due to flawed pipeline routing, but rather the CNN's fundamental inability to perform fine-grained surface evaluation.
 
+## Architecture 2 - Test 3: Calibrated Constrained Routing (Threshold Shifting)
 
+**Motivation for Test 3:** While Test 2 successfully isolated the grading task by restricting Stage 2's output domain, it exposed a severe statistical bias. 
+
+Due to extreme class imbalance in the training data, the Stage 2 CNN overwhelmingly defaulted to Grade B (e.g., Metal Grade A Recall was only 0.08, while Grade B was 0.78). The model was not entirely "blind" to Grade A features, but the probability scores for Grade A were mathematically suppressed below the standard 0.5 argmax decision boundary. 
+
+To counteract this training bias without retraining the model, Test 3 introduces inference-level Threshold Shifting (Calibration).
+
+- **Role:** The final optimized iteration of the pure CNN pipeline
+
+- **Design Paradigm:** Algorithmic Probability Calibration.
+
+- **Core Task:** Neutralize the model's statistical bias toward the majority class (Grade B) by manually lowering the activation threshold for the minority class (Grade A) during inference
+
+## Inference Logic & Routing Setup
+
+Preserved Masking: The system retains the strict Logit Masking from Test 2. Stage 2 is only allowed to output probabilities for the specific A/B grades of the material predicted by Stage 1
+
+Relative Probability Calculation: Instead of relying on raw softmax outputs, the system calculates the relative probability of Grade A within the masked domain:
+
+![equation](https://latex.codecogs.com/png.image?\dpi{120}P_{rel}(A)=\frac{P(A)}{P(A)+P(B)})
+
+Threshold Shifting: The standard 0.5 decision boundary is dynamically lowered to account for the model's hesitation to predict Grade A
+
+Metal Threshold: Lowered to 0.30 (If the model thinks a metal item is at least 30% likely to be Grade A, it classifies it as Grade A).
+
+Plastic Threshold: Lowered to 0.40.
