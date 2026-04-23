@@ -99,7 +99,7 @@ To fully exhaust the potential of hierarchical pipelines before transitioning to
 ### System Performance Metrics
 
 *Architecture 2 Test 1*
-<img width="430" height="500" alt="image" src="https://github.com/user-attachments/assets/fdbf259f-c59f-4528-9a03-76f55b2f64f0" />
+<img width="460" height="500" alt="image" src="https://github.com/user-attachments/assets/fdbf259f-c59f-4528-9a03-76f55b2f64f0" />
 
 - Average Latency: 160.06 ms / image
 
