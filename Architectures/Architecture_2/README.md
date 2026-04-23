@@ -72,5 +72,75 @@ Need for Confidence-Based Routing: Hard-coded conditional routing based solely o
 
 Justification for Vision Transformers (VLMs): Chaining standard CNNs merely compounds computational cost (FPS dropped from 9.27 to 7.32) without solving the surface evaluation problem. True quality grading mathematically requires the global attention and semantic reasoning capabilities of a Transformer/VLM in the secondary stage.
 
+## Architecture 2 Extensions
 
+To fully exhaust the potential of hierarchical pipelines before transitioning to Transformer-based models, we conducted three controlled experiments (Tests 1-3) built upon the Architecture 2 baseline. The objective is to evaluate how various software-level routing logic and confidence heuristics impact the accuracy-latency trade-off. In this architectural research context, both performance gains and regressions provide critical insights into system boundaries.
 
+## Architecture 2 - Test 1: Confidence-Based Fallback Mechanism
+
+**Motivation for Test 1:** The base Architecture 2 suffered heavily from "Cascading Errors" due to its rigid routing. If Stage 1 incorrectly classified a crushed metal can as 'glass', the item bypassed the grading stage entirely, permanently locking in the error. Test 1 attempts to patch this vulnerability by introducing a dynamic, uncertainty-aware fallback mechanism.
+
+- **Role:** Experimental iteration extending Architecture 2 with dynamic, uncertainty-aware thresholding
+
+- **Design Paradigm:** Heuristic-driven conditional routing
+
+- **Core Task:** Mitigate cascading errors from the primary model by utilizing prediction confidence as a safety net before finalizing outputs
+
+### Inference Logic & Routing Setup
+
+**Stage 1 (Primary):** MobileNetV2 (8-class) outputs a base material prediction alongside a statistical confidence score
+
+**Trigger A (Mandatory Grading):** If Stage 1 predicts metal or plastic $\rightarrow$ Route to Stage 2 for A/B quality assessment
+
+**Trigger B (Uncertainty Fallback):** If Stage 1 predicts another material, BUT confidence is < 0.90 → Route to Stage 2 as a safety verification
+
+**Fast-Path (Bypass):** If Stage 1 predicts another material AND confidence is >= 0.90 → Bypass Stage 2 and finalize output
+
+### System Performance Metrics
+
+*Architecture 2 Test 1*
+<img width="430" height="500" alt="image" src="https://github.com/user-attachments/assets/fdbf259f-c59f-4528-9a03-76f55b2f64f0" />
+
+- Average Latency: 160.06 ms / image
+
+- Frame Rate: 6.25 FPS
+
+- Stage 2 Utilization: 453 / 1000 samples (45.3% of the dataset) -- Grading Calls: 375 -- Fallback Calls: 78
+
+- System Recovery: 10 classification errors successfully prevented by the fallback mechanism.
+
+- Overall Accuracy: 77.50%
+
+### Key Findings
+
+**1. Proof of Concept for Dynamic Routing**
+
+The logic successfully intercepted and corrected cascading errors that the rigid Base Architecture 2 missed:
+
+- 78 statistically uncertain predictions were caught and routed to the secondary model
+
+- 10 of these were successfully "rescued" (Stage 1 base prediction was entirely incorrect, but Stage 2 overrode it with the perfect truth)
+
+→ Confidence thresholding is a mathematically sound software strategy to prevent rigid pipeline failures
+
+**2. Severe Computational Penalty**
+
+The safety net comes at a heavy processing cost:
+
+- Frame rate plummeted to 6.25 FPS (down from 9.27 FPS in the Single-Stream Baseline)
+
+- Forcing nearly half the dataset (45.3%) through two separate MobileNetV2 networks creates massive architectural redundancy
+
+→ Using a heavy 10-class CNN just to double-check uncertain predictions is computationally inefficient and pushes the system below optimal real-time operational thresholds
+
+**3. The Grading Bottleneck Remains Unsolved**
+
+Despite the smarter software logic, the core classification flaw remains untouched:
+
+- Metal Grade A Recall remains severely suppressed at 0.0900 (9%)
+
+- Overall pipeline accuracy only saw a negligible improvement (77.50% vs 77.10% baseline)
+
+→ Advanced routing logic cannot fix a fundamentally incapable feature extractor. Even when routed correctly, the Stage 2 CNN still cannot resolve the fine-grained surface defects required for A/B grading.
+
+Test Implication: The confidence < 0.90 heuristic proves that multi-stage pipelines require uncertainty assessment to function reliably.
