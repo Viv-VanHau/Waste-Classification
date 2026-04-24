@@ -1,9 +1,9 @@
-| Iteration     | Routing / Masking Mechanism        | Accuracy | Metal Grade A (Recall) | Key Architectural Insight |
-|---------------|------------------------------------|----------|------------------------|---------------------------|
-| **Base Arch 4**   | Decoupled (Unconstrained VLM)      | **90.50%**   | 0.7500                 | Task isolation shatters the 80% ceiling. CNN handles materials; VLM masters grading |
-| Test 1        | Decoupled + Calibration Boost      | 90.50%   | 0.7600                 | Proves the system is structurally optimized; probability manipulation yields diminishing returns |
-| Test 2        | Decoupled + Hard Hierarchical Mask | 89.90%   | 0.7500                 | Prevents VLM hallucinations but completely blinds the system to CNN triage failures |
-| Test 3        | Decoupled + Soft Penalty Mask      | 90.40%   | 0.7500                 | The definitive configuration. Balances hierarchical control with dynamic VLM error-correction capabilities |
+| Iteration   | Routing / Masking Mechanism        | Accuracy | Metal Grade A (Recall) | Inference Speed | Key Architectural Insight |
+|------------|------------------------------------|----------|------------------------|-----------------|---------------------------|
+| Base Arch 4 | Decoupled (Unconstrained VLM)      | 90.50%   | 0.7500                 | 8.22 FPS        | Task isolation shatters the 80% ceiling. CNN handles materials; VLM masters grading |
+| Test 1      | Decoupled + Calibration Boost      | 90.50%   | 0.7600                 | 8.34 FPS        | Proves the system is structurally optimized; probability manipulation yields diminishing returns |
+| Test 2      | Decoupled + Hard Hierarchical Mask | 89.90%   | 0.7500                 | 8.32 FPS        | Prevents VLM hallucinations but completely blinds the system to CNN triage failures |
+| Test 3      | Decoupled + Soft Penalty Mask      | 90.40%   | 0.7500                 | 8.20 FPS        | The definitive configuration. Balances hierarchical control with dynamic VLM error-correction capabilities |
 
 ## Architecture 4: Precision Grading Pipeline (Decoupled VLM) [Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 4 - VLM Grading)]
 
