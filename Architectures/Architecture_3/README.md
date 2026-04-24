@@ -21,15 +21,15 @@
 *Architecture 3 dual-evaluation metrics*
 <img width="1830" height="979" alt="image" src="https://github.com/user-attachments/assets/288264c7-3d75-47a9-b637-f181e9684c79" />
 
-- Average Latency: 125.24 ms / image
+- **Average Latency:** 125.24 ms / image
 
-- Frame Rate: 7.98 FPS
+- **Frame Rate:** 7.98 FPS
 
-- VLM Utilization: 286 / 1000 samples (28.6% of the dataset)
+- **VLM Utilization:** 286 / 1000 samples (28.6% of the dataset)
 
-- VLM Rescued Count: 72 classification errors successfully fixed by the ViT
+- **VLM Rescued Count:** 72 classification errors successfully fixed by the ViT
 
-- Overall Accuracy: 75.80% (10-Class) | 88.70% (Pure Material 8-Class)
+- **Overall Accuracy:** 75.80% (10-Class) | 88.70% (Pure Material 8-Class)
 
 This architecture yielded highly polarized results, proving the fundamental capability of Transformers while exposing a critical flaw in the routing mechanism:
 
