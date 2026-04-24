@@ -47,3 +47,35 @@ Despite the VLM's superior grading ability, the overall system accuracy regresse
 
 → Because the CNN is overconfident in its mistakes, the pipeline bypasses Stage 2. The VLM only received 28.6% of the dataset. It cannot rescue Grade A images if the CNN confidently hoards them
 
+## Architecture 3 - Sensitivity Analysis
+
+To fully address the paradox observed in the baseline hybrid system, we must investigate whether the performance bottleneck can be resolved by manipulating the routing parameters. 
+
+Hypothetically, if the Stage 1 CNN is overconfident in its grading errors, raising the confidence threshold should forcefully strip the CNN of its authority, pushing a higher volume of "hard cases" to the VLM. 
+
+The data reveals a counter-intuitive trajectory as the threshold increases:
+
+*Architecture 3 Sensitivity Analysis*
+<img width="800" height="210" alt="image" src="https://github.com/user-attachments/assets/fed81fca-a48b-43f7-a510-0c42bec20c76" />
+
+The empirical data uncovers a critical architectural flaw that threshold optimization alone cannot fix.
+
+**1. The Inverse Accuracy Correlation**
+
+Logically, routing more data to a highly advanced Vision Transformer should increase accuracy. The data proves the exact opposite:
+
+- As the threshold rises to 0.95, VLM utilization doubles (reaching 38.9%), and successful rescues nearly triple (reaching 100)
+
+- However, the overall 10-Class Accuracy actually drops from its peak of 75.80% down to 74.60%
+
+- More critically, the pure material (8-Class) accuracy bleeds steadily from 89.50% down to 87.60%
+
+**2. Identifying the Root Cause**
+   
+By forcing the threshold higher, the system intercepts CNN predictions that were statistically uncertain but factually correct.
+
+- The VLM is highly specialized in complex surface grading (identifying dents and dirt), but it is functionally inferior to the CNN at broad, macro-level material recognition
+
+- When forced to re-evaluate base materials, the VLM overwrites correct CNN material predictions with incorrect ones. It rescues 100 grading cases but destroys even more pure material cases in the process, resulting in a net negative impact on the system
+
+This sensitivity sweep mathematically proves that you cannot optimize a flawed pipeline simply by shifting its gating parameter. Finding a "sweet spot" is impossible because the Stage 1 router and the Stage 2 solver have fundamentally conflicting strengths.
