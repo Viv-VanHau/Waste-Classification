@@ -110,7 +110,7 @@ Stage 1 (Primary): MobileNetV2 outputs a 10-class probability array (P_{CNN})
 
 - **Weighted Integration:** The final decision is mathematically fused using a 40/60 split favoring the VLM's grading expertise while anchoring to the CNN's material baseline: P_{final} = (0.4 x P_{CNN}) + (0.6 x P_{VLM})
 
-## System Performance Metrics
+### System Performance Metrics
 
 **Architecture 3 Test 1**
 <img width="420" height="450" alt="image" src="https://github.com/user-attachments/assets/0e021fd5-770d-4c4a-b052-f5370317c87f" />
@@ -125,7 +125,7 @@ Stage 1 (Primary): MobileNetV2 outputs a 10-class probability array (P_{CNN})
 
 - Overall Accuracy: 78.60% (An absolute improvement of +2.80% over Base Architecture 3)
 
-## Key Findings
+### Key Findings
 
 **1. Successful Mitigation of False Rescues**
 
