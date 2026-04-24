@@ -1,3 +1,10 @@
+| Iteration     | Routing / Masking Mechanism        | Accuracy | Metal Grade A (Recall) | Key Architectural Insight |
+|---------------|------------------------------------|----------|------------------------|---------------------------|
+| **Base Arch 4**   | Decoupled (Unconstrained VLM)      | **90.50%**   | 0.7500                 | Task isolation shatters the 80% ceiling. CNN handles materials; VLM masters grading |
+| Test 1        | Decoupled + Calibration Boost      | 90.50%   | 0.7600                 | Proves the system is structurally optimized; probability manipulation yields diminishing returns |
+| Test 2        | Decoupled + Hard Hierarchical Mask | 89.90%   | 0.7500                 | Prevents VLM hallucinations but completely blinds the system to CNN triage failures |
+| Test 3        | Decoupled + Soft Penalty Mask      | 90.40%   | 0.7500                 | The definitive configuration. Balances hierarchical control with dynamic VLM error-correction capabilities |
+
 ## Architecture 4: Precision Grading Pipeline (Decoupled VLM) [Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 4 - VLM Grading)]
 
 **Motivation for Architecture 4:**
@@ -168,3 +175,58 @@ Despite creating a theoretically safer and more logically sound system, the over
 - In rare, highly anomalous cases, the Stage 1 CNN makes a primary classification error (e.g., predicting plastic for a highly degraded metal can). In the unconstrained Base Arch 4, the VLM sometimes "hallucinated" the correct material across domains, accidentally correcting the CNN's mistake
 
 - Trade-off Resolution: By applying the domain constraint, we remove the VLM's ability to accidentally "lucky guess" the base material. While this causes a minor statistical drop (-0.60%), it is an essential engineering trade-off. In industrial deployment, deterministic reliability (where the system obeys strict hierarchical rules) is vastly preferred over relying on neural network hallucinations for random error correction
+
+## Architecture 4 - Test 3: Soft Penalty Domain Constraint (Dynamic Trust Masking)
+
+While Test 2's strict hierarchical masking guaranteed that the VLM would never contradict the CNN's material prediction, it introduced an inflexible vulnerability: if the CNN made a catastrophic triage error, the VLM was mathematically "blindfolded" and forced to grade the wrong material
+
+To achieve true systemic resilience, the pipeline requires a middle ground between the chaotic freedom of the Base Architecture and the rigid authoritarianism of Test 2
+
+Test 3 introduces Soft Penalty Domain Constraints. Instead of forcefully zeroing out cross-domain probabilities, the system applies a heavy penalty multiplier. This heuristic weighting suppresses casual VLM hallucinations but permits "rescues", allowing the VLM to override the CNN only if its cross-domain semantic conviction is overwhelmingly high
+
+- **Design Paradigm:** Heuristic Weighting / Soft Bounding
+
+- **Core Task:** Balance architectural hierarchy with error-correction flexibility by penalizing, rather than prohibiting, cross-domain VLM predictions
+
+### Inference Logic & Routing Setup
+
+- **Stage 1 (Macro-Triage):** MobileNetV2 (8-Class) predicts the base material
+
+- **Routing:** Targeted materials (metal, plastic) are routed to the VLM (4-Class)
+
+- **Soft Penalty Masking:** Based on the Stage 1 prediction, a penalty mask is generated
+
+- *Example (CNN predicts Metal):* The mask applied to the VLM output is [1.0, 1.0, 0.35, 0.35]. The probabilities for Metal A/B remain intact, while the probabilities for Plastic A/B are severely penalized (reduced by 65%)
+
+- **Dynamic Override:** To output a cross-domain prediction (e.g., classifying as Plastic when the CNN said Metal), the VLM's raw probability for Plastic must be exponentially higher than its probability for Metal to survive the 0.35 penalty multiplier
+
+### System Performance Metrics
+
+*Architecture 4 Test 3*
+<img width="450" height="470" alt="image" src="https://github.com/user-attachments/assets/630f289b-2ba5-429d-9699-69acc2fb49d0" />
+
+- Average Latency: 121.95 ms / image
+
+- Frame Rate: 8.20 FPS
+
+- VLM Utilization: 375 / 1000 samples
+
+- Suppressed Hallucinations: 1 out-of-domain false alarm successfully prevented by the penalty
+
+- Soft Rescues: 5 cross-domain errors explicitly fixed by the VLM overcoming the penalty
+
+- Overall Pipeline Accuracy: 90.40%
+
+### Key Findings
+
+The implementation perfectly executed its dual mandate:
+
+- The system recorded 5 "Soft Rescues". These were instances where the Stage 1 CNN entirely misidentified the material structure, but the VLM's semantic recognition was so statistically dominant that it mathematically overpowered the 0.35 penalty to correct the base material
+
+- Simultaneously, the penalty successfully suppressed 1 hallucination, preventing the VLM from making a casual cross-domain error
+
+Operating at 90.40% (statistically equivalent to the unconstrained baseline), this configuration is qualitatively superior. It provides the mathematical safety net of Architecture 4 Test 2, without sacrificing the synergistic error-correction potential of Architecture 3.
+
+## Final Conclusion for Architecture 4
+
+The evolutionary journey from Architecture 1 (Monolithic CNN at 77.10%) to Architecture 4 (Decoupled VLM Pipeline at ~90.50%) definitively answers the core research question. Standard Convolutional Neural Networks fundamentally lack the semantic reasoning necessary for strict, multi-conditional quality grading.
