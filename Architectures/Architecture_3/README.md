@@ -144,3 +144,68 @@ Crucially, the fusion mechanism did not dilute the VLM's primary contribution:
 - The VLM successfully applied its global self-attention to surface defects, pulling up the minority class performance while relying on the CNN weight to keep the base material accurate.
 
 This test mathematically proves that heterogeneous models (CNNs and Transformers) possess distinct, complementary feature spaces. Hard routing creates conflicting objectives, whereas probability fusion harmonizes them.
+
+## Architecture 3 - Test 2: Calibrated Soft Fusion (Post-hoc Prior Adjustment)
+
+**Motivation for Test 2:** While Test 1 (Soft Fusion) successfully arrested the systemic accuracy decay, it exposed a persistent statistical flaw deeply rooted in the 10-Class structure: extreme class imbalance bias. 
+
+The system's ability to identify Grade A materials plummeted (Plastic Grade A Recall: 0.3800). 
+
+Because both the CNN and VLM were trained on imbalanced datasets, their raw softmax outputs naturally skewed toward the statistically dominant Grade B. Soft Fusion simply averaged these two biased distributions, failing to correct the underlying prejudice. 
+
+To counteract this, Test 2 implements Post-hoc Probability Calibration, a Bayesian-inspired adjustment to manually shift the prior distribution before finalizing the output.
+
+- **Design Paradigm:** Probability Weighting / Algorithmic Bias Correction
+
+- **Core Task:** Inject domain-specific calibration multipliers into the fused probability array to artificially boost the "activation likelihood" of minority classes (Grade A), counteracting the inherent training bias
+
+### Inference Logic & Routing Setup
+
+- **Routing:** Maintains the optimal 0.85 confidence threshold established in previous analysis
+
+- **Base Fusion:** If the VLM is invoked, the system computes the hybrid probability array: P_{fused} = (0.4 x P_{CNN}) + (0.6 x P_{VLM})
+
+- **Calibration Multiplier:** The raw P_{fused} array is multiplied element-wise by a custom weight matrix designed to inject synthetic "oxygen" into suppressed classes:
+
+- *Plastic Grade A:* Multiplied by 1.50 (50% artificial boost to rescue the 38% Recall)
+
+- *Metal Grade A:* Multiplied by 1.25 (25% boost)
+
+- *All other classes:* Multiplied by 1.0 (No change)
+
+- **Final Decision:** The system recalculates the argmax on the newly calibrated probability distribution
+
+### System Performance Metrics
+
+*Architecture 3 Test 2*
+<img width="450" height="500" alt="image" src="https://github.com/user-attachments/assets/b4d20bb1-7094-40a3-8b69-5226c6fae436" />
+
+- Average Latency: 126.30 ms / image
+
+- Frame Rate: 7.92 FPS
+
+- VLM Utilization: 286 / 1000 samples
+
+- Calibration Shifts: 36 predictions were explicitly altered (bypassing the standard argmax) due to the calibration multipliers
+
+- Total Rescues: 75 errors successfully prevented in Stage 2
+
+- Overall Accuracy: 80.10% (A milestone breakthrough, surpassing the 80% threshold)
+
+### Key Findings
+
+**1. The Efficacy of Algorithmic Bias Correction**
+
+The 36 calibration shifts yielded massive, targeted improvements precisely where the system was failing:
+
+- Plastic Grade A: Recall surged from a catastrophic 0.3800 up to 0.6300. F1-score jumped from 0.5205 to 0.7000
+
+- Metal Grade A: Recall stabilized at 0.5600, but Precision improved slightly
+
+→ By mechanically shifting the prior distribution, we proved that the hybrid network was extracting the correct features for Grade A, but those signals were being statistically drowned out by the Grade B bias.
+
+**2. Breaking the 80% Threshold**
+
+For the first time in the 10-Class unified pipeline (where one system handles all materials and grades), accuracy crossed the 80% mark. This 80.10% result proves the viability of CNN-VLM fusion when supported by rigorous mathematical calibration.
+
+
