@@ -1,4 +1,4 @@
-## Architecture 3: Confidence-Routed Hybrid System Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 2 - CNN 10 Classes)
+## Architecture 3: Confidence-Routed Hybrid System [ Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 2 - CNN 10 Classes) ]
 
 - **Role:** The first hybrid iteration integrating a Vision Transformer (ViT) to specifically address the fine-grained grading bottleneck identified in the purely CNN-based architectures
 
