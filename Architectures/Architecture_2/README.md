@@ -241,7 +241,7 @@ To counteract this training bias without retraining the model, Test 3 introduces
 ### System Performance Metrics
 
 *Architecture 2 Test 3*
-<img width="530" height="520" alt="image" src="https://github.com/user-attachments/assets/8e72d134-aaac-4aac-9394-96c6bdb17556" />
+<img width="550" height="520" alt="image" src="https://github.com/user-attachments/assets/8e72d134-aaac-4aac-9394-96c6bdb17556" />
 
 - Average Latency: 143.40 ms / image
 
