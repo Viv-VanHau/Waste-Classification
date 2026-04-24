@@ -1,7 +1,8 @@
-# ========================================== base
+# ================================================================
 # ARCHITECTURE 4: PRECISION GRADING PIPELINE
 # WORKFLOW: STAGE 1 (CNN 8-CLASS) -> STAGE 2 (VLM GRADING 4-CLASS)
-# ==========================================
+# ================================================================
+
 import os
 import time
 import glob
