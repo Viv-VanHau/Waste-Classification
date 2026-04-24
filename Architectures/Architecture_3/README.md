@@ -1,3 +1,11 @@
+| Iteration        | Core Software Mechanism      | Accuracy (10-Class) | Metal Grade A (Recall) | Key Architectural Insight |
+|------------------|------------------------------|---------------------|------------------------|---------------------------|
+| Base Arch 3      | Hard Routing (Override)      | 75.80%              | 0.5500                 | VLM solves grading, but CNN Gatekeeper causes destructive overrides |
+| Sensitivity      | Threshold Sweep              | 75.80% (Max)        | N/A                    | Proves parameter tuning cannot fix structural incompatibility |
+| Test 1           | Soft Fusion                  | 78.60%              | 0.5600                 | Probability averaging stabilizes accuracy but exposes underlying class bias |
+| Test 2           | Calibrated Fusion            | 80.10%              | 0.5600                 | Prior adjustment boosts minority classes, breaking the 80% threshold |
+| **Test 3**    | Top-K Constrained Fusion | **80.60%**          | 0.5400             | Masking prevents VLM hallucination but exposes the need for structural task decoupling |
+
 ## Architecture 3: Confidence-Routed Hybrid System [Stage 1 (Model 1 - CNN 8 Classes) → Stage 2 (Model 2 - CNN 10 Classes)]
 
 - **Role:** The first hybrid iteration integrating a Vision Transformer (ViT) to specifically address the fine-grained grading bottleneck identified in the purely CNN-based architectures
@@ -208,4 +216,72 @@ The 36 calibration shifts yielded massive, targeted improvements precisely where
 
 For the first time in the 10-Class unified pipeline (where one system handles all materials and grades), accuracy crossed the 80% mark. This 80.10% result proves the viability of CNN-VLM fusion when supported by rigorous mathematical calibration.
 
+## Architecture 3 - Test 3: Top-K Constrained Calibrated Fusion
+
+**Motivation for Test 3:** Test 2 successfully addressed the class imbalance bias via probability calibration, pushing the accuracy to 80.10%. 
+
+However, empirical log analysis revealed that when the VLM was invoked to resolve low-confidence CNN predictions, it occasionally generated wildly out-of-domain probabilities due to the highly noisy nature of the visual data. 
+
+Soft fusion mitigated this, but did not eliminate it. To maximize efficiency, the VLM should act strictly as a "Tie-Breaker" between the CNN's most likely hypotheses, rather than searching the entire 10-Class space. 
+
+Test 3 implements Top-K Constrained Fusion to algorithmicly force the VLM to focus its semantic reasoning solely on the most highly probable material candidates identified by the primary CNN.
+
+- Design Paradigm: Heuristic Bounding / Top-K Logit Masking
+
+- Core Task: Utilize the CNN's localized feature extraction to narrow the search space, forcing the VLM to apply its global attention exclusively to resolving the ambiguity between the Top-2 predictions
+
+### Inference Logic & Routing Setup
+
+- Stage 1 (CNN): MobileNetV2 outputs the raw probability array. If Confidence >= 0.85, the pipeline bypasses 
+
+- Stage 2.Top-K Extraction: If routed to Stage 2, the system extracts the indices of the Top 2 highest probabilities from the CNN output. (Hypothesis: Even when uncertain, the CNN correctly identifies the true class within its Top 2 choices)
+
+- Logit Masking: The VLM's 10-Class probability array is intercepted. All probabilities outside the CNN's Top-2 indices are forcefully set to zero (zero-out)
+
+- Normalization & Fusion: The masked VLM array is re-normalized to sum to 1.0, then fused with the CNN using the established 40/60 weighting
+
+- Calibration: The calibration multipliers (1.50x for Plastic A, 1.25x for Metal A) are applied before the final argmax decision
+
+### System Performance Metrics
+
+*Architecture 3 Test 3*
+<img width="500" height="550" alt="image" src="https://github.com/user-attachments/assets/a78d7a5d-0e1f-4fbb-aef1-1d8ffae5499f" />
+
+- Average Latency: 117.88 ms / image
+
+- Frame Rate: 8.48 FPS
+
+- VLM Utilization: 286 / 1000 samples
+
+- Constrained Corrections: 33 out-of-domain VLM errors were successfully prevented by the Top-2 masking
+
+- Total Rescues: 76 classification errors fixed by the integrated Stage 2 logic
+
+### Key Findings
+
+**1. The Effectiveness of Bounded Reasoning**
+
+By restricting the VLM to a "Tie-Breaker" role, the pipeline achieved its highest accuracy (80.60%) while minimizing destructive overrides:
+
+- The Top-K mask successfully intercepted and prevented 33 instances where the VLM attempted to output an irrational prediction (e.g., classifying a low-confidence plastic bottle as a battery)
+
+- By bounding the search space, the VLM could safely leverage its 60% fusion weight to resolve the fine-grained differences without corrupting the macro-level material classification
+
+**2. The Persistent Metal Grading Bottleneck**
+
+Despite applying the absolute pinnacle of algorithmic optimization (confidence routing, soft fusion, probability calibration, and Top-K masking) the system still fundamentally struggles with specific grades:
+
+- Metal Grade A Recall: Stagnated at 0.5400.
+
+→ The VLM is capable of grading, but forcing it to operate within a 10-Class framework fundamentally dilutes its representational power. Even when artificially constrained to two classes during inference, the VLM was structurally trained on ten
+
+## Final Conclusion for Architecture 3
+
+Architecture 3 has definitively proven two critical axioms for this research:
+
+- Vision Transformers are capable of strict quality grading (achieving > 50% Recall on Metal A, compared to the CNN's ~8%)
+
+- Unified 10-Class Models are inherently flawed routers. Forcing a model to learn macro (materials) and micro (grades) simultaneously dilutes its latent space
+
+The 80.60% ceiling reached in Test 3 represents the absolute limit of "software-level patching." To achieve industrial-grade accuracy (>85%), the system must abandon the 10-Class paradigm entirely. This mandates the transition to Architecture 4, which will physically decouple the pipeline into an 8-Class CNN (pure material classification) and a specialized 4-Class VLM (pure grading), removing the need for complex algorithmic safety nets.
 
