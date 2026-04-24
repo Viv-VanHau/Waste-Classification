@@ -1,4 +1,4 @@
-| Iteration        | Core Software Mechanism      | Accuracy (10-Class) | Metal Grade A (Recall) | Key Architectural Insight |
+| Iteration        | Core Software Mechanism      | Accuracy (10-Class) | Metal Grade A (Recall) | **Key Architectural Insight** |
 |------------------|------------------------------|---------------------|------------------------|---------------------------|
 | Base Arch 3      | Hard Routing (Override)      | 75.80%              | 0.5500                 | VLM solves grading, but CNN Gatekeeper causes destructive overrides |
 | Sensitivity      | Threshold Sweep              | 75.80% (Max)        | N/A                    | Proves parameter tuning cannot fix structural incompatibility |
