@@ -79,3 +79,68 @@ By forcing the threshold higher, the system intercepts CNN predictions that were
 - When forced to re-evaluate base materials, the VLM overwrites correct CNN material predictions with incorrect ones. It rescues 100 grading cases but destroys even more pure material cases in the process, resulting in a net negative impact on the system
 
 This sensitivity sweep mathematically proves that you cannot optimize a flawed pipeline simply by shifting its gating parameter. Finding a "sweet spot" is impossible because the Stage 1 router and the Stage 2 solver have fundamentally conflicting strengths.
+
+## Architecture 3 Extensions
+
+To fully exhaust the potential of hierarchical pipelines before transitioning to Transformer-based models, we conducted three controlled experiments (Tests 1-3) built upon the Architecture 2 baseline. The objective is to evaluate how various software-level routing logic and confidence heuristics impact the accuracy-latency trade-off. In this architectural research context, both performance gains and regressions provide critical insights into system boundaries.
+
+## Architecture 3 - Test 1: Soft Fusion Fallback
+
+**Motivation for Test 1:** The sensitivity sweep in the baseline Architecture 3 revealed a critical flaw: hard-routing is a double-edged sword. 
+
+As the VLM was granted more authority (threshold = 0.95), it successfully rescued 100 grading errors but simultaneously destroyed even more correct base material predictions, causing overall accuracy to drop. 
+
+The VLM acts as an excellent "Grader" but a poor "Material Filter." Test 1 introduces Soft Fusion to act as an algorithmic shock absorber. Instead of allowing the VLM to completely overwrite the CNN (Hard Override), the system forces a mathematical consultation between both models, weighting the CNN's superior material intuition against the VLM's superior surface inspection.
+
+- **Role:** An optimized hybrid iteration utilizing weighted probability combination to prevent the VLM from corrupting macro-level material predictions
+
+- **Design Paradigm:** Heuristic-Triggered Soft Voting Ensemble
+
+- **Core Task:** Retaining a percentage of the CNN's original confidence distribution when consulting the Vision Transformer on hard cases
+
+### Inference Logic & Routing Setup
+
+Stage 1 (Primary): MobileNetV2 outputs a 10-class probability array (P_{CNN})
+
+- **Routing Trigger:** Confidence_{CNN} < 0.85
+
+- **Fast-Path:** If Confidence >= 0.85, the pipeline outputs the CNN prediction directly
+
+- **Soft Fusion Sub-routine:** If routed to Stage 2, the VLM generates its own 10-class probability array (P_{VLM})
+
+- **Weighted Integration:** The final decision is mathematically fused using a 40/60 split favoring the VLM's grading expertise while anchoring to the CNN's material baseline: P_{final} = (0.4 x P_{CNN}) + (0.6 x P_{VLM})
+
+## System Performance Metrics
+
+**Architecture 3 Test 1**
+<img width="420" height="450" alt="image" src="https://github.com/user-attachments/assets/0e021fd5-770d-4c4a-b052-f5370317c87f" />
+
+- Average Latency: 118.25 ms / image
+
+- Frame Rate: 8.46 FPS
+
+- VLM Utilization: 286 / 1000 samples
+
+- Fusion Rescues: 69 classification errors successfully prevented by the fused probabilities
+
+- Overall Accuracy: 78.60% (An absolute improvement of +2.80% over Base Architecture 3)
+
+## Key Findings
+
+**1. Successful Mitigation of False Rescues**
+
+The Soft Fusion logic performed exactly as hypothesized, stabilizing the pipeline's overall accuracy:
+
+- The systemic accuracy surged to 78.60%, fully recovering the performance lost to the VLM's destructive overrides in the baseline hybrid
+
+- The 40% CNN weight effectively acted as an anchor, preventing the VLM from making wildly incorrect out-of-domain predictions (e.g., misclassifying a highly confident metal can as glass)
+
+**2. Preservation of VLM Grading Superiority**
+
+Crucially, the fusion mechanism did not dilute the VLM's primary contribution:
+
+- Metal Grade A Recall: Maintained an impressive 0.5600 (compared to the CNN-only ceiling of 0.3100)
+
+- The VLM successfully applied its global self-attention to surface defects, pulling up the minority class performance while relying on the CNN weight to keep the base material accurate.
+
+This test mathematically proves that heterogeneous models (CNNs and Transformers) possess distinct, complementary feature spaces. Hard routing creates conflicting objectives, whereas probability fusion harmonizes them.
