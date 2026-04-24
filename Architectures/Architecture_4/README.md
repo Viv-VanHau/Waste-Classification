@@ -61,13 +61,13 @@ Despite utilizing a heavy Transformer, the deterministic routing logic maintaine
 
 **Motivation for Test 1:**
 
-The Decoupled VLM in baseline Architecture 4 achieved a monumental 90.50% accuracy. 
+The Decoupled VLM in baseline Architecture 4 achieved a monumental 90.50% accuracy.
 
-However, a granular review of the confusion matrix indicated that the Vision Transformer still exhibited a slight statistical bias toward Grade B materials, a direct consequence of the imbalanced training distribution (e.g., thousands of Grade B samples versus hundreds of Grade A). 
+However, a granular review of the confusion matrix indicated that the Vision Transformer still exhibited a slight statistical bias toward Grade B materials, a direct consequence of the imbalanced training distribution (e.g., thousands of Grade B samples versus hundreds of Grade A) 
 
-While the specialized 4-Class structure naturally mitigated most of this bias, Metal Grade A Recall plateaued at 0.7500. 
+While the specialized 4-Class structure naturally mitigated most of this bias, Metal Grade A Recall plateaued at 0.7500
 
-To theoretically optimize the economic value of the recycling pipeline—where missing a premium Grade A material is more costly than downgrading a Grade B—Test 1 implements a highly targeted Probability Calibration on the VLM's output logits.
+To theoretically optimize the economic value of the recycling pipeline, where missing a premium Grade A material is more costly than downgrading a Grade B, Test 1 implements a highly targeted Probability Calibration on the VLM's output logits
 
 - **Design Paradigm:** Targeted Output Probability Multiplier
 
