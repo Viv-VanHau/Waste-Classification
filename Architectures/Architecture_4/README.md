@@ -108,4 +108,63 @@ While the overall system accuracy remained statistically identical at 90.50%, th
 
 The specific calibration shifts successfully increased borderline Grade A items that the raw VLM had conservatively downgraded to Grade B.
 
-Unlike the unstable 10-Class hybrid (Architecture 3), where calibration caused unpredictable shifts across entirely unrelated materials, the decoupled pipeline is highly robust. Applying a 25% boost to a metal grade did not artificially inflate or corrupt the plastic grades or the base materials. The task isolation acts as a proof to the architecture's stability
+Unlike the unstable 10-Class hybrid (Architecture 3), where calibration caused unpredictable shifts across entirely unrelated materials, the decoupled pipeline is highly robust. Applying a 25% boost to a metal grade did not artificially inflate or corrupt the plastic grades or the base materials. The task isolation acts as proof of the architecture's stability
+
+## Architecture 4 - Test 2: Hierarchical Logit Masking
+
+**Motivation for Test 2**
+
+While Architecture 4 successfully decoupled base classification from quality grading, log analysis revealed a subtle structural vulnerability
+
+The VLM-4 specialist model evaluates four distinct classes simultaneously (Metal A/B and Plastic A/B). When Stage 1 (CNN) confidently routes a metal item to Stage 2, the VLM is theoretically given the freedom to contradict Stage 1 and classify the item as Plastic Grade A
+
+This permits "cross-domain hallucinations," where the VLM's grading expertise overrides and corrupts the CNN's superior macro-material classification
+
+To enforce strict architectural hierarchy, Test 2 implements Domain-Constrained Masking, algorithmically locking the VLM into the specific material domain dictated by Stage 1
+
+- **Design Paradigm:** Hierarchical Tree Routing / Conditional Logit Masking
+
+- **Core Task:** Mathematically restrict the Stage 2 Vision Transformer's output space exclusively to the A/B quality grades of the specific base material predicted by the Stage 1 CNN
+
+### Inference Logic & Routing Setup
+
+- **Hierarchical Trigger:** Stage 1 predicts a base material (e.g., metal). The item is routed to the VLM
+
+- **Dynamic Mask Generation:** The system generates a domain-specific constraint mask corresponding to the Stage 1 prediction:
+
+- *If CNN predicts metal:* Mask = [1.0, 1.0, 0.0, 0.0] (allowing only Metal A/B)
+
+- *If CNN predicts plastic:* Mask = [0.0, 0.0, 1.0, 1.0] (allowing only Plastic A/B)
+
+- **Mask Application & Normalization:** The VLM computes raw probabilities across all 4 classes. The array is multiplied by the constraint mask, forcefully zeroing out cross-domain probabilities. The array is then re-normalized to sum to 1.0
+
+- **Final Decision:** The VLM acts purely as a local grade discriminator within the enforced boundary
+
+### System Performance Metrics
+
+*Architecture 4 Test 2*
+<img width="470" height="500" alt="image" src="https://github.com/user-attachments/assets/b6e7f588-6897-4701-a0c2-0110a7f77978" />
+
+- Average Latency: 120.23 ms / image
+
+- Frame Rate: 8.32 FPS
+
+- VLM Utilization: 375 / 1000 samples
+
+- Masked Corrections: 6 explicit out-of-domain VLM hallucinations were successfully intercepted and prevented by the hierarchical mask.
+
+Overall Pipeline Accuracy: 89.90%
+
+###  Key Findings
+
+The implementation successfully established a rigid deterministic hierarchy:
+
+- The constraint mask intercepted 6 distinct instances where the VLM attempted to cross material domains (e.g., trying to grade a metal object as plastic)
+
+- By enforcing this logic, the pipeline ensures that the 92.70% pure material accuracy achieved by the Stage 1 CNN is mathematically protected from downstream VLM corruption
+
+Despite creating a theoretically safer and more logically sound system, the overall accuracy slightly regressed from the 90.50% baseline to 89.90%
+
+- In rare, highly anomalous cases, the Stage 1 CNN makes a primary classification error (e.g., predicting plastic for a highly degraded metal can). In the unconstrained Base Arch 4, the VLM sometimes "hallucinated" the correct material across domains, accidentally correcting the CNN's mistake
+
+- Trade-off Resolution: By applying the domain constraint, we remove the VLM's ability to accidentally "lucky guess" the base material. While this causes a minor statistical drop (-0.60%), it is an essential engineering trade-off. In industrial deployment, deterministic reliability (where the system obeys strict hierarchical rules) is vastly preferred over relying on neural network hallucinations for random error correction
