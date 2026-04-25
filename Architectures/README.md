@@ -1,4 +1,4 @@
-| Architecture | Best Configuration | Accuracy (8-Class - No Grading) | Accuracy (10-Class - Grading) | Frames per Second |
+| Architecture | Best Configuration | Accuracy (8-Class) | Accuracy (10-Class) | Frames per Second |
 |-------------|--------------------|-------------------------|-----------------------------|-----------------|
 | Arch 1: CNN Baseline | N/A | 89.70% | 77.10% | 9.27 FPS |
 | Arch 2: (CNN 8 Classes) → (CNN 10 Classes) | Test 3 | 90.50% | 82.20% | 6.97 FPS |
