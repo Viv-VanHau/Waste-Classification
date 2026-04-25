@@ -1,4 +1,4 @@
-## Architecture 1: Single-Stream CNN Baseline
+## Architecture 1: Single-Stream CNN Baseline [Model 2 (CNN 10 Classes)]
 
 - **Role:** Primary CNN baseline for the study
 
