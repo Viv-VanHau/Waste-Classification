@@ -1,3 +1,5 @@
+## Constrained Batch_Size = 1 (Conveyor Belt environment)
+
 | Architecture | Best Configuration | Accuracy (8-Class) | Accuracy (10-Class) | Frames per Second |
 |-------------|--------------------|-------------------------|-----------------------------|-----------------|
 | Arch 1: CNN Baseline | N/A | 89.70% | 77.10% | 9.27 FPS |
