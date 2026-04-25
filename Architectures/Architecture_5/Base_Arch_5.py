@@ -17,10 +17,10 @@ from peft import PeftModel
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from matplotlib.colors import LinearSegmentedColormap
 
-# 1. Define Paths
-extract_dir = 'your_path'
+# 1. Define Paths & Hardcoded Classes
+extract_dir = '/content/Base_Test_Data'
 vlm_10class_dir = '/content/drive/MyDrive/Thesis_Project/TrashVLM_10_Classes_Model'
-output_dir = 'your_path'
+output_dir = '/content/drive/MyDrive/Thesis_Project/Base_Test_Results/Architecture_5' # Tách thư mục cho gọn gàng
 
 os.makedirs(output_dir, exist_ok=True)
 
@@ -37,20 +37,20 @@ for root, dirs, files in os.walk(extract_dir):
 
 print(f"Data directory locked at: {test_dir}")
 
-# 3. Load Model
+# 3. Load Model (Pure VLM)
 print("Loading Model 5 (TrashVLM 10-Class Monolithic)...")
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
 
-model_path = vlm_10class_dir
-if not os.path.exists(os.path.join(vlm_10class_dir, 'adapter_config.json')):
-    print("adapter_config.json not found in root. Searching for latest checkpoint...")
-    checkpoints = glob.glob(os.path.join(vlm_10class_dir, "checkpoint-*"))
-    if checkpoints:
-        model_path = max(checkpoints, key=os.path.getmtime)
-        print(f"Found checkpoint! Routing VLM path to: {model_path}")
-    else:
-        raise FileNotFoundError(f"CRITICAL ERROR: No adapter_config.json or checkpoints found in {vlm_10class_dir}.")
+# =========================================================================
+best_checkpoint_name = "checkpoint-7975"
+# =========================================================================
+
+model_path = os.path.join(vlm_10class_dir, best_checkpoint_name)
+if not os.path.exists(os.path.join(model_path, 'adapter_config.json')):
+    raise FileNotFoundError(f"CRITICAL ERROR: Không tìm thấy config trong {model_path}. Sếp nhớ đổi tên checkpoint ở dòng 43 nha!")
+
+print(f"Force loading specific checkpoint: {model_path}")
 
 base_model = ViTForImageClassification.from_pretrained(
     "google/vit-base-patch16-224-in21k",
@@ -61,7 +61,7 @@ vlm_model = PeftModel.from_pretrained(base_model, model_path)
 vlm_model.to(device)
 vlm_model.eval()
 
-# 4. Prepare Data Pipeline
+# 4. Prepare Data Pipeline (Raw Images for Processor)
 test_datagen = ImageDataGenerator()
 test_generator = test_datagen.flow_from_directory(
     test_dir,
@@ -119,6 +119,7 @@ for i in range(total_samples):
         "Status": final_status
     })
 
+    # Terminal trace
     print(f"{i+1:03d}    | {true_class:<20} | {final_decision:<20} | {final_status}")
 
 end_time = time.perf_counter()
@@ -129,7 +130,7 @@ df_log = pd.DataFrame(routing_logs)
 csv_path = os.path.join(output_dir, 'Arch5_Inference_Log.csv')
 df_log.to_csv(csv_path, index=False)
 
-# 7. Performance Metrics
+# 7. Performance & Speed Metrics
 total_time = end_time - start_time
 avg_time_per_image_ms = (total_time / total_samples) * 1000
 fps = 1000 / avg_time_per_image_ms
@@ -181,7 +182,7 @@ cm_save_path = os.path.join(output_dir, 'Arch5_Confusion_Matrix_Orange.png')
 plt.savefig(cm_save_path, dpi=300, bbox_inches='tight')
 plt.close()
 
-# F1-Score Bar Chart
+# 9.2 F1-Score Bar Chart
 f1_scores = f1_score(y_true, y_pred, average=None, labels=final_classes)
 
 plt.figure(figsize=(12, 6))
@@ -202,4 +203,94 @@ f1_save_path = os.path.join(output_dir, 'Arch5_F1_Scores_Chart.png')
 plt.savefig(f1_save_path, dpi=300, bbox_inches='tight')
 plt.close()
 
-print(f"Process Complete, outputs saved to: {output_dir}")
+# ================================================================================
+# EXTRA EVALUATION ARCH 5: PURE WASTE CLASSIFICATION (8 CLASSES - IGNORING GRADES)
+# ================================================================================
+
+print("\n" + "="*80)
+print("EXTRA EVALUATION: PURE WASTE CLASSIFICATION (NO GRADING)")
+print("="*80)
+
+# 1. Define the mapping logic (Merging grades into parent materials)
+category_mapping = {
+    'battery': 'battery',
+    'glass': 'glass',
+    'metal_Grade_A': 'metal',     # Merge A
+    'metal_Grade_B': 'metal',     # Merge B
+    'organic_waste': 'organic_waste',
+    'paper_cardboard': 'paper_cardboard',
+    'plastic_Grade_A': 'plastic', # Merge A
+    'plastic_Grade_B': 'plastic', # Merge B
+    'textiles': 'textiles',
+    'trash': 'trash'
+}
+
+# 2. y_true and y_pred are already Strings in Arch 5 -> map directly
+y_true_base = [category_mapping[label] for label in y_true]
+y_pred_base = [category_mapping[label] for label in y_pred]
+
+# 3. Get unique base classes for the new report (8 classes)
+base_classes = sorted(list(set(category_mapping.values())))
+
+# 4. Calculate new metrics
+base_accuracy = accuracy_score(y_true_base, y_pred_base)
+print(f"Accuracy (Classification Only - No Grading): {base_accuracy * 100:.2f}%\n")
+
+base_report = classification_report(y_true_base, y_pred_base, target_names=base_classes, digits=4)
+print(base_report)
+
+# 5. Append this finding to the existing Arch 5 text report
+with open(report_path, 'a') as f:
+    f.write("\n\n" + "*"*60 + "\n")
+    f.write("EXTRA: PURE WASTE CLASSIFICATION (8 CLASSES - NO GRADING)\n")
+    f.write("*"*60 + "\n")
+    f.write(f"Pure Classification Accuracy: {base_accuracy * 100:.2f}%\n\n")
+    f.write(base_report)
+
+# 6. Generate Visualizations for 8-Class Evaluation
+cm_base = confusion_matrix(y_true_base, y_pred_base, labels=base_classes)
+
+teal_colors = ["#ffffff", "#e0f2f1", "#80cbc4", "#26a69a", "#00695c"]
+custom_teal_cmap = LinearSegmentedColormap.from_list("custom_teal", teal_colors, N=256)
+
+plt.figure(figsize=(12, 9))
+sns.set_theme(style="white")
+
+ax = sns.heatmap(cm_base, annot=True, fmt='d', cmap=custom_teal_cmap,
+                 xticklabels=base_classes, yticklabels=base_classes,
+                 annot_kws={"size": 12, "weight": "bold", "family": "serif"},
+                 linewidths=0, cbar=True)
+
+plt.title('Architecture 5: Pure Classification (8 Classes)',
+          fontsize=18, fontweight='bold', pad=25, family='serif', color='#004d40')
+plt.ylabel('Actual Category', fontsize=14, fontweight='bold', family='serif')
+plt.xlabel('AI Predicted Category', fontsize=14, fontweight='bold', family='serif')
+plt.xticks(rotation=45, ha='right', fontsize=11)
+plt.yticks(rotation=0, fontsize=11)
+plt.tight_layout()
+
+cm_base_save_path = os.path.join(output_dir, 'Arch5_BaseClassification_CM_Teal.png')
+plt.savefig(cm_base_save_path, dpi=300, bbox_inches='tight')
+plt.close()
+
+# 6.2 F1-Score Bar Chart (8 Classes)
+print("Generating 8-Class F1-Score Chart for Arch 5...")
+f1_scores_base = f1_score(y_true_base, y_pred_base, average=None, labels=base_classes)
+
+plt.figure(figsize=(10, 5))
+sns.set_theme(style="whitegrid")
+bars = plt.bar(base_classes, f1_scores_base, color='#26a69a', edgecolor='#00695c', linewidth=1.5)
+
+plt.title('Architecture 5: Pure Classification F1-Score', fontsize=16, fontweight='bold', family='serif', pad=20)
+plt.ylabel('F1-Score', fontsize=12, fontweight='bold', family='serif')
+plt.ylim(0, 1.1)
+plt.xticks(rotation=45, ha='right', fontsize=11)
+
+for bar in bars:
+    yval = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2, yval + 0.02, f'{yval:.4f}', ha='center', va='bottom', fontsize=10, fontweight='bold')
+
+plt.tight_layout()
+f1_base_save_path = os.path.join(output_dir, 'Arch5_BaseClassification_F1_Chart.png')
+plt.savefig(f1_base_save_path, dpi=300, bbox_inches='tight')
+plt.close()
