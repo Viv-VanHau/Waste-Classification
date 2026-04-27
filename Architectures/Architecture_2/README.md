@@ -1,3 +1,5 @@
+### Constrained Batch_Size = 1 (Conveyor Belt environment: End-to-End System Latency)
+
 | Iteration   | Core Software Mechanism     | Overall Accuracy | Inference Speed | Metal Grade A (Recall) | Key Architectural Insight |
 |------------|----------------------------|------------------|-----------------|------------------------|---------------------------|
 | Base Arch 2 | Rigid Sequential Routing   | 78.00%           | **7.32 FPS**        | 0.0800                 | Suffers heavily from cascading errors. If Stage 1 misclassifies, the error is locked in |
