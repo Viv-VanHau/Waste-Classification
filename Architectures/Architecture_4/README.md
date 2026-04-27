@@ -1,3 +1,5 @@
+### Constrained Batch_Size = 1 (Conveyor Belt environment: End-to-End System Latency)
+
 | Iteration   | Routing / Masking Mechanism        | Accuracy | Metal Grade A (Recall) | Inference Speed | Key Architectural Insight |
 |------------|------------------------------------|----------|------------------------|-----------------|---------------------------|
 | Base Arch 4 | Decoupled (Unconstrained VLM)      | **90.50%**   | 0.7500                 | 8.22 FPS        | Task isolation shatters the 80% ceiling. CNN handles materials; VLM masters grading |
