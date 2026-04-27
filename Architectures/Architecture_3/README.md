@@ -1,3 +1,5 @@
+### Constrained Batch_Size = 1 (Conveyor Belt environment: End-to-End System Latency)
+
 | Iteration        | Core Software Mechanism      | Accuracy (10-Class) | Metal Grade A (Recall) | **Key Architectural Insight** |
 |------------------|------------------------------|---------------------|------------------------|---------------------------|
 | Base Arch 3      | Hard Routing (Override)      | 75.80%              | 0.5500                 | VLM solves grading, but CNN Gatekeeper causes destructive overrides |
