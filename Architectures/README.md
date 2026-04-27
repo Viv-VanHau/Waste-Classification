@@ -25,7 +25,7 @@
 | Arch 8: Test 4 | 25.95 | 31.71 | ~1.2x |
 | Arch 9: Test 4 | 6.83 | 25.63 | ~3.7x |
 
-### Hardware Scalability and Throughput Analysis (Pure GPU Throughput)
+### Hardware Scalability and Throughput Analysis (Pure GPU Throughput - Batch Size Testing)
 | Architecture | Acc-8-Class | Acc-10-Class | BS = 1 | BS = 8 | BS = 16 | BS = 32 | BS = 64 | Peak FPS |
 |---|---:|---:|---:|---:|---:|---:|---:|---|
 | Arch 1 | 89.70% | 77.10% | 37.72 | 215.49 | 422.63 | 437.52 | 386.69 | Batch 32 (437.5 FPS) |
