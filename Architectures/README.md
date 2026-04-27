@@ -13,7 +13,7 @@
 | Arch 9: [CNN 10 Classes + ViT 10 classes] → (VLM Grading) | Test 4 | 98.00% | 96.50% | 6.83 FPS |
 
 ### Constrained Batch_Size = 1: End-to-End Latency vs. Pure GPU Throughput
-| Architecture | End-to-End Latency (Real-world FPS) | Pure GPU Throughput (Hardware Limit FPS) | Hardware Speedup Factor |
+| Architecture | End-to-End Latency | Pure GPU Throughput | Hardware Speedup Factor |
 |---|---:|---:|---|
 | Arch 1: CNN Baseline | 9.27 | 37.72 | ~4.0x |
 | Arch 2: Test 3 | 6.97 | 46.55 | ~6.6x |
