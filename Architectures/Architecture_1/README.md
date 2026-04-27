@@ -1,4 +1,5 @@
 ## Architecture 1: Single-Stream CNN Baseline [Model 2 (CNN 10 Classes)]
+### Constrained Batch_Size = 1 (Conveyor Belt environment: End-to-End System Latency)
 
 - **Role:** Primary CNN baseline for the study
 
