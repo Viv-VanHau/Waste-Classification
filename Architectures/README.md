@@ -1,4 +1,4 @@
-### Constrained Batch_Size = 1 (Conveyor Belt environment - End-to-End System Latency)
+### Constrained Batch_Size = 1 (Conveyor Belt environment: End-to-End System Latency)
 
 | Architecture | Best Configuration | Accuracy (8-Class) | Accuracy (10-Class) | Frames per Second |
 |-------------|--------------------|-------------------------|-----------------------------|-----------------|
