@@ -1,4 +1,4 @@
-## A Comparative Study of Multi-Stage Lightweight CNN and Vision Transformer Approaches for Waste Classification and Grading
+## A Comparative Study of Multi-Stage Lightweight CNN and Vision-Language Model Approaches for Waste Classification and Grading
 
 This project explores 5 deep learning models and 9 distinct system architectures to achieve high-precision waste classification and quality grading using the UWCD (Unified Waste Classification Dataset).
 
