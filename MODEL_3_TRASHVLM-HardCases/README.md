@@ -1,3 +1,5 @@
+# DISMISSED
+
 ## 🛠 Quick Start
 - Hardware: Google Colab (T4 GPU enabled)
 - Execution: Run the provided train.py. The best-performing model will be saved automatically as 'TrashVLM_LoRA_Output.h5'
