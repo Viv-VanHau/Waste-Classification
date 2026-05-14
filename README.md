@@ -1,6 +1,6 @@
 ## A Comparative Study of Multi-Stage Lightweight CNN and Vision Transformer Model Approaches for Waste Classification and Grading
 
-This project explores 5 deep learning models and 9 distinct system architectures to achieve high-precision waste classification and quality grading using the UWCD (Unified Waste Classification Dataset).
+This project explores 4 deep learning models and 8 distinct system architectures to achieve high-precision waste classification and quality grading using the UWCD (Unified Waste Classification Dataset).
 
 ## 📂 Project Resources
 
@@ -46,6 +46,6 @@ This repository is organized into 5 primary modules, each representing a specifi
 
 ## 🔗 Research Architectures
 
-We evaluated 9 architectural iterations to navigate the trade-offs between inference latency (FPS) and classification robustness (Accuracy):
+We evaluated 8 architectural iterations to navigate the trade-offs between inference latency (FPS) and classification robustness (Accuracy):
 
 <img width="1252" height="1034" alt="image" src="https://github.com/user-attachments/assets/a003931f-415a-4c5c-9b8a-f12deb353716" />
